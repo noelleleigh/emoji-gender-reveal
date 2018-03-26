@@ -1,0 +1,6 @@
+#canvas {
+  box-shadow: 0 0 5px 0px black;
+}
+main > button {
+  display: block;
+}
