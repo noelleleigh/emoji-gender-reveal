@@ -1,7 +1,7 @@
 {
   "name": "gender-reveal-cake",
   "version": "1.0.0",
-  "description": "",
+  "description": "Display emoji gender reveal cakes",
   "main": "server.js",
   "scripts": {
     "start": "node ./server.js",
