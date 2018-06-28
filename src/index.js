@@ -4,19 +4,6 @@ import emojiArray from './emoji.json'
 import twemoji from 'twemoji'
 
 /**
- * Get a random integer in range [min, max]
- * Source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
- * @param {Number} min - Lower bound
- * @param {Number} max - Upper bound
- * @returns {Number}
- */
-const getRandomIntInclusive = (min, max) => {
-  min = Math.ceil(min)
-  max = Math.floor(max)
-  return Math.floor(Math.random() * (max - min + 1)) + min
-}
-
-/**
  * Test that string only contains a single supported emoji.
  * "Supported" means that twemoji can retrieve a single image for it.
  * @param {String} string - String to check for emoji
@@ -61,10 +48,10 @@ const ctx = canvas.getContext('2d')
 const fillCanvasWithImage = (ctx, image) => {
   ctx.save()
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-  for (let i = 0; i < 200; i += 1) {
-    const x = getRandomIntInclusive(-(image.width / 2), ctx.canvas.width - (image.width / 2))
-    const y = getRandomIntInclusive(-(image.height / 2), ctx.canvas.height - (image.height / 2))
-    ctx.drawImage(image, x, y)
+  for (let y = 0; y < ctx.canvas.height; y += image.height) {
+    for (let x = 0; x < ctx.canvas.width; x += image.width) {
+      ctx.drawImage(image, x, y)
+    }
   }
   ctx.restore()
 }
