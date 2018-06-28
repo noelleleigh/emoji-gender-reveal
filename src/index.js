@@ -18,17 +18,15 @@ const testHasEmoji = (string) => {
 
 /**
  * Return a randomly chosen entry from `emojiArray` that is supported by twemoji.
+ * @param {Object[]} emojiArray - Array of objects containing `char` properties
  * @returns {Object} {char: <String>, descr: <String>}
  */
-const selectValidEmoji = () => {
-  let foundValidEmoji = false
+const selectSupportedEmoji = (emojiArray) => {
+  let foundSupportedEmoji = false
   let index = null
-  while (!foundValidEmoji) {
+  while (!foundSupportedEmoji) {
     index = Math.floor(Math.random() * emojiArray.length)
-    foundValidEmoji = testHasEmoji(emojiArray[index].char)
-    // if (!foundValidEmoji) {
-    //   console.error('Emoji without image found: ', emojiArray[index])
-    // }
+    foundSupportedEmoji = testHasEmoji(emojiArray[index].char)
   }
   return emojiArray[index]
 }
