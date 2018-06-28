@@ -4,14 +4,15 @@
   "description": "Display emoji gender reveal cakes",
   "main": "server.js",
   "scripts": {
-    "start": "node ./server.js",
+    "start": "npm run build && npm run serve",
+    "serve": "node ./server.js",
     "build": "webpack --mode production",
     "build-dev": "webpack --mode development",
     "build-dev-watch": "webpack --mode development --watch",
-    "start-dev": "npm run build-dev && npm start",
+    "start-dev": "npm run build-dev && npm run serve",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": ["emoji", "gender", "humor"],
   "author": "Noah Leigh",
   "repository": {
     "type": "git",
