@@ -31,11 +31,6 @@ const selectSupportedEmoji = (emojiArray) => {
   return emojiArray[index]
 }
 
-const canvas = document.getElementById('canvas')
-canvas.width = 500
-canvas.height = 400
-const ctx = canvas.getContext('2d')
-
 /**
  * Cover the canvas with instances of an image.
  * @param {CanvasRenderingContext2D} ctx - The canvas context
@@ -157,7 +152,12 @@ const newEmoji = (ctx, emojiArray) => {
   }
 }
 
-drawBigCenteredText(ctx, "What's the baby's gender?")
+const canvas = document.getElementById('canvas')
+canvas.width = 500
+canvas.height = 400
+const ctx = canvas.getContext('2d')
+
+drawBigCenteredText(ctx, ["What's the baby's gender?"])
 const button = document.createElement('button')
 button.textContent = 'Click for new gender'
 button.addEventListener('click', newEmoji)
