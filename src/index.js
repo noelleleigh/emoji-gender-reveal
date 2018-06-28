@@ -131,22 +131,30 @@ const drawBigCenteredText = (ctx, textArray) => {
 }
 
 /**
- * Fill the canvas with a randomly chosen emoji
+ * Return a function that fills the canvas with a randomly chosen emoji
+ * @param {CanvasRenderingContext2D} ctx - The canvas context
+ * @param {Object[]} emojiArray - Array of objects containing `char` and `descr` properties
+ * @returns {Function}
  */
-const newEmoji = () => {
-  const emoji = selectValidEmoji()
-  twemoji.parse(emoji.char, {
-    callback: (icon, options, varient) => {
-      const url = `${options.base}${options.size}/${icon}.png`
-      const image = new Image(...options.size.split('x').map(val => Number.parseInt(val, 10)))
-      image.src = url
-      image.addEventListener('load', event => {
-        fillCanvasWithImage(ctx, image)
-        drawBigCenteredText(ctx, `It's a ${emoji.descr.toUpperCase()}!`)
-      })
-    },
-    onerror: (error) => console.error(error)
-  })
+const newEmoji = (ctx, emojiArray) => {
+  return () => {
+    const emoji = selectSupportedEmoji(emojiArray)
+    twemoji.parse(emoji.char, {
+      callback: (icon, options, varient) => {
+        const resolution = options.size.split('x').map(val => Number.parseInt(val, 10))
+        const image = new Image(...resolution)
+        image.src = `${options.base}${options.size}/${icon}.png`
+        image.addEventListener('load', event => {
+          fillCanvasWithImage(ctx, image)
+          drawBigCenteredText(ctx, [
+            `It's a${/^(a|e|i|o|u)/.test(emoji.descr.toLowerCase()) ? 'n' : ''}`,
+            ...emoji.descr.toUpperCase().split(':')
+          ])
+        })
+      },
+      onerror: (error) => console.error(error)
+    })
+  }
 }
 
 drawBigCenteredText(ctx, "What's the baby's gender?")
