@@ -152,6 +152,15 @@ const newEmoji = (ctx, emojiArray) => {
   }
 }
 
+// We want to exclude the basic "boy", "girl", "man", "woman" emoji + all skintone modifiers
+// Those wouldn't be funny
+const unwantedEmojiRegEx = /^(1F467|1F466|1F468|1F469)( (1F3FB|1F3FC|1F3FD|1F3FE|1F3FF))?$/
+const filteredEmojiArray = emojiArray.filter(emojiObj => {
+  const codePoints = twemoji.convert.toCodePoint(emojiObj.char, ' ').toUpperCase()
+  const isUnwantedEmoji = unwantedEmojiRegEx.test(codePoints)
+  return !isUnwantedEmoji
+})
+
 const canvas = document.getElementById('canvas')
 canvas.width = 500
 canvas.height = 400
@@ -159,6 +168,7 @@ const ctx = canvas.getContext('2d')
 
 drawBigCenteredText(ctx, ["What's the baby's gender?"])
 const button = document.createElement('button')
+canvas.addEventListener('click', newEmoji(ctx, filteredEmojiArray))
 button.textContent = 'Click for new gender'
-button.addEventListener('click', newEmoji)
+button.addEventListener('click', newEmoji(ctx, filteredEmojiArray))
 document.querySelector('main').appendChild(button)
