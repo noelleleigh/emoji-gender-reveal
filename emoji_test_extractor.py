@@ -10,14 +10,14 @@ import requests
 REGEX = re.compile(r'^((([0-9A-F]+) )+)\s+; fully-qualified\s+# ([^ ]+) (.+)')
 
 
-def test_line(line):
+def test_line(string):
     """Test whether a string matches REGEX."""
-    return True if re.match(REGEX, line) is not None else False
+    return True if re.match(REGEX, string) is not None else False
 
 
-def extract_info(line):
+def extract_info(string):
     """Extract the literal emoji codepoint sequence and the description."""
-    matches = re.match(REGEX, line)
+    matches = re.match(REGEX, string)
     char = matches.group(4)
     descr = matches.group(5)
     return {
