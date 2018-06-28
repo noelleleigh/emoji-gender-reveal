@@ -11,8 +11,6 @@ import twemoji from 'twemoji'
  */
 const testHasEmoji = (string) => {
   const parsed = twemoji.parse(string)
-  // console.log(string)
-  // console.log(parsed)
   const div = document.createElement('div')
   div.innerHTML = parsed
   return (div.textContent === '' && div.childElementCount === 1)
@@ -80,7 +78,6 @@ const drawBigCenteredText = (ctx, text) => {
  */
 const newEmoji = () => {
   const emoji = selectValidEmoji()
-  // console.log(`Congrats! Your gender is ${emoji.descr.toUpperCase()}`)
   twemoji.parse(emoji.char, {
     callback: (icon, options, varient) => {
       const url = `${options.base}${options.size}/${icon}.png`
@@ -90,7 +87,6 @@ const newEmoji = () => {
         fillCanvasWithImage(ctx, image)
         drawBigCenteredText(ctx, `It's a ${emoji.descr.toUpperCase()}!`)
       })
-      // console.log('%c       ', `font-size: 100px; background: url(${url}) no-repeat;`)
     },
     onerror: (error) => console.error(error)
   })
