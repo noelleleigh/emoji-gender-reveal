@@ -1,4 +1,15 @@
+body {
+  max-width: 500px;
+  margin: auto;
+  padding: 0 1em;
+}
+
+header {
+  text-align: center;
+}
+
 #canvas {
+  width: 100%;
   box-shadow: 0 0 5px 0px black;
 }
 main > button {
