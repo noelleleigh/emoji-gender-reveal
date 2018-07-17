@@ -32,15 +32,19 @@ const selectSupportedEmoji = (emojiArray) => {
 }
 
 /**
- * Cover the canvas with instances of an image.
+ * Cover the canvas with instances of an image, rotated 45 degrees
  * @param {CanvasRenderingContext2D} ctx - The canvas context
  * @param {HTMLImageElement} image - The image to fill the canvas with
+ * @param {Number} alpha - The tranparency of the image (0.0 - 1.0)
  */
-const fillCanvasWithImage = (ctx, image) => {
+const fillCanvasWithImage = (ctx, image, alpha) => {
   ctx.save()
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-  for (let y = 0; y < ctx.canvas.height; y += image.height) {
-    for (let x = 0; x < ctx.canvas.width; x += image.width) {
+  ctx.globalAlpha = alpha
+  ctx.translate(ctx.canvas.width / 2, -ctx.canvas.height)
+  ctx.rotate(Math.PI / 4)
+  for (let y = 0; y < 2 * ctx.canvas.height; y += image.height) {
+    for (let x = 0; x < 2 * ctx.canvas.width; x += image.width) {
       ctx.drawImage(image, x, y)
     }
   }
@@ -101,74 +105,248 @@ const roundRect = (ctx, x, y, width, height, radius, fill, stroke) => {
 }
 
 /**
- * Draws the text in large black lettering over a white rounded rect in the center of the canvas
+ * Like ctx.drawText, but with multiline support.
  * @param {CanvasRenderingContext2D} ctx - The canvas context
- * @param {String[]} textArray - Array of strings to go on the canvas. Each string will be on a line.
+ * @param {String[]} textArray - The array of lines of text
+ * @param {Number} x - X position of text
+ * @param {Number} y - Y position of text
+ * @param {Number} fontSizePx - The size of the font in pixels
  */
-const drawBigCenteredText = (ctx, textArray) => {
+const fillTextMultiline = (ctx, textArray, x, y, fontSizePx) => {
   ctx.save()
-  ctx.fillStyle = 'white'
-  ctx.strokeStyle = 'black'
-  ctx.lineWidth = 2
-  const fontSize = 48
-  ctx.font = `bold ${fontSize}px sans-serif`
-  ctx.textAlign = 'center'
-  ctx.textBaseline = 'middle'
-  const textStartingY = (ctx.canvas.height - ((textArray.length - 1) * fontSize)) / 2
-  roundRect(ctx, 5, textStartingY - fontSize / 2, ctx.canvas.width - 10, textArray.length * fontSize, 10, true)
-  for (let line = 0; line < textArray.length; line += 1) {
-    ctx.fillStyle = 'black'
-    const textY = textStartingY + (line * fontSize)
-    ctx.fillText(textArray[line], ctx.canvas.width / 2, textY, ctx.canvas.width - 10)
-    // ctx.strokeText(textArray[line], ctx.canvas.width / 2, textY, ctx.canvas.width)
+
+  for (let lineIndex = 0; lineIndex < textArray.length; lineIndex += 1) {
+    const lineY = y + (lineIndex * fontSizePx)
+    ctx.fillText(textArray[lineIndex], x, lineY)
   }
+
   ctx.restore()
 }
 
 /**
- * Return a function that fills the canvas with a randomly chosen emoji
+ * Handles boilerplate so you can get access to an HTMLImage element of the emoji to do stuff with.
+ * @param {Function} imgLoadCallback - Callback function that takes an image load event when the
+ * emoji image has finished loading and is ready to be used
+ * @returns {Function} Function for the callback option of the twemoji.parse function
+ */
+const useTwemojiImage = (imgLoadCallback) => {
+  return (icon, options) => {
+    const resolution = options.size.split('x').map(val => Number.parseInt(val, 10))
+    const image = new Image(...resolution)
+    image.src = `${options.base}${options.size}/${icon}.png`
+    image.addEventListener('load', imgLoadCallback)
+  }
+}
+
+/**
+ * Take a string and split it into an array of strings, each less than a maximum character count
+ * (unless a single word is longer)
+ * Doesn't support combined unicode characters
+ * @param {String} longString - String to be split
+ * @param {Number} maxLineLength - Number of characters a line should have at most
+ * @returns {String[]}
+ */
+const splitStringLines = (longString, maxLineLength) => {
+  const words = longString.split(' ')
+  const lines = []
+  let currentLine = ''
+  for (let word of words) {
+    if (currentLine === '') {
+      currentLine = word
+    } else if (currentLine.length + 1 + word.length < maxLineLength) {
+      currentLine += ' '
+      currentLine += word
+    } else if (currentLine.length + 1 + word.length >= maxLineLength) {
+      lines.push(currentLine)
+      currentLine = word
+    }
+  }
+  lines.push(currentLine)
+  return lines
+}
+
+/**
+ * Try a new way to display the emoji result
  * @param {CanvasRenderingContext2D} ctx - The canvas context
  * @param {Object[]} emojiArray - Array of objects containing `char` and `descr` properties
  * @returns {Function}
  */
 const newEmoji = (ctx, emojiArray) => {
   return () => {
+    // const emoji = {
+    //   'char': '\u{1F574}\u{1F3FC}',
+    //   'descr': 'man in suit levitating: medium-light skin tone'
+    // }
     const emoji = selectSupportedEmoji(emojiArray)
     twemoji.parse(emoji.char, {
-      callback: (icon, options, varient) => {
-        const resolution = options.size.split('x').map(val => Number.parseInt(val, 10))
-        const image = new Image(...resolution)
-        image.src = `${options.base}${options.size}/${icon}.png`
-        image.addEventListener('load', event => {
-          fillCanvasWithImage(ctx, image)
-          drawBigCenteredText(ctx, [
-            `It's a${/^(a|e|i|o|u)/.test(emoji.descr.toLowerCase()) ? 'n' : ''}`,
-            ...emoji.descr.toUpperCase().split(':')
-          ])
-        })
-      },
+      callback: useTwemojiImage((event) => {
+        ctx.save()
+        const textLines = splitStringLines(
+          `Congrats! It's a${/^(a|e|i|o|u)/.test(emoji.descr.toLowerCase()) ? 'n' : ''} ${emoji.descr.toUpperCase()}! `,
+          17
+        )
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+        const blue = '#94F4FF'
+        const pink = '#F5BDC2'
+        for (let radius = ctx.canvas.width; radius > 60; radius -= 20) {
+          ctx.fillStyle = ctx.fillStyle === blue ? pink : blue
+          ctx.beginPath()
+          ctx.arc(ctx.canvas.width / 2, 100, radius, 0, 2 * Math.PI)
+          ctx.fill()
+        }
+        fillCanvasWithImage(ctx, event.target, 0.25)
+
+        ctx.fillStyle = 'lightgrey'
+        ctx.beginPath()
+        ctx.arc(ctx.canvas.width / 2, 100, 65, 0, 2 * Math.PI)
+        ctx.fill()
+
+        ctx.fillStyle = 'white'
+        ctx.beginPath()
+        ctx.arc(ctx.canvas.width / 2, 100, 60, 0, 2 * Math.PI)
+        ctx.fill()
+
+        ctx.drawImage(event.target, (ctx.canvas.width - event.target.width) / 2, 100 - (event.target.height / 2))
+        const fontSize = 48
+        ctx.fillStyle = '#333'
+        ctx.font = `bold ${fontSize}px sans-serif`
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'top'
+        const textY = 170 + ((ctx.canvas.height - 170) - fontSize * textLines.length) / 2
+        fillTextMultiline(ctx, textLines, ctx.canvas.width / 2, textY, fontSize)
+        ctx.restore()
+      }),
       onerror: (error) => console.error(error)
     })
   }
 }
 
-// We want to exclude the basic "boy", "girl", "man", "woman" emoji + all skintone modifiers
-// Those wouldn't be funny
-const unwantedEmojiRegEx = /^(1F467|1F466|1F468|1F469)( (1F3FB|1F3FC|1F3FD|1F3FE|1F3FF))?$/
-const filteredEmojiArray = emojiArray.filter(emojiObj => {
-  const codePoints = twemoji.convert.toCodePoint(emojiObj.char, ' ').toUpperCase()
-  const isUnwantedEmoji = unwantedEmojiRegEx.test(codePoints)
-  return !isUnwantedEmoji
-})
+/**
+ * Draw the first scene on the canvas
+ * @param {CanvasRenderingContext2D} ctx - The canvas context
+ */
+const drawTitleScreen = (ctx) => {
+  ctx.save()
+
+  // Useful constants
+  const canvasWidth = ctx.canvas.width
+  const canvasHeight = ctx.canvas.height
+
+  // Draw pink rectangle
+  ctx.fillStyle = 'pink'
+  ctx.fillRect(0, 0, canvasWidth / 2, canvasHeight)
+
+  // Draw blue rectangle
+  ctx.fillStyle = 'lightblue'
+  ctx.fillRect(canvasWidth / 2, 0, canvasWidth / 2, canvasHeight)
+
+  // Make the emoji strings to retrieve the emoji images
+  const femaleSignString = '\u{2640}\u{FE0F}'
+  const maleSignString = '\u{2642}\u{FE0F}'
+  const questionMarkString = '\u{2753}'
+
+  twemoji.parse(femaleSignString, {
+    callback: useTwemojiImage((event) => {
+      const img = event.target
+      ctx.drawImage(
+        img,
+        (canvasWidth / 4) - (img.width / 2),
+        (canvasHeight / 2) - (img.height / 2)
+      )
+    }),
+    onerror: console.error
+  })
+
+  twemoji.parse(maleSignString, {
+    callback: useTwemojiImage((event) => {
+      const img = event.target
+      ctx.drawImage(
+        img,
+        canvasWidth - (canvasWidth / 4) - (img.width / 2),
+        (canvasHeight / 2) - (img.height / 2)
+      )
+    }),
+    onerror: console.error
+  })
+
+  twemoji.parse(questionMarkString, {
+    callback: useTwemojiImage((event) => {
+      const img = event.target
+      ctx.drawImage(
+        img,
+        (canvasWidth / 2) - (img.width / 2),
+        (canvasHeight / 2) - (img.height / 2)
+      )
+    }),
+    onerror: console.error
+  })
+
+  // Write text
+  ctx.fillStyle = 'white'
+  ctx.textAlign = 'center'
+  ctx.font = 'bold 2em sans-serif'
+  ctx.fillText('What will the new baby be?', canvasWidth / 2, 70)
+  // ctx.lineWidth = 1.0
+  // ctx.strokeText('What will the new baby be?', canvasWidth / 2, 70)
+
+  // Draw button
+  roundRect(ctx, (canvasWidth / 2) - (250 / 2), canvasHeight - 100, 250, 50, 5, true, true)
+
+  // Write button text
+  ctx.fillStyle = 'black'
+  ctx.textAlign = 'center'
+  ctx.font = '2em sans-serif'
+  ctx.fillText('Reveal Gender', canvasWidth / 2, canvasHeight - 100 + 35)
+
+  ctx.restore()
+}
+
+/**
+ * Decides whether to allow this emoji to be used.
+ * Disallows basic Baby, Child, Boy, Girl, Adult, Man, Woman, Older Adult, Old Man, Old Woman emoji
+ * Disallows emoji with "police" in their description
+ * @param {Object} emoji - Object with `char` and `descr` properties
+ * @returns {Boolean}
+ */
+const emojiFilter = (emoji) => {
+  const basicEmoji = {
+    'skinTones': [
+      '1F3FB', // light skin tone
+      '1F3FC', // medium-light skin tone
+      '1F3FD', // medium skin tone
+      '1F3FE', // medium-dark skin tone
+      '1F3FF' // dark skin tone
+    ],
+    'baseEmoji': [
+      '1F476', // Baby
+      '1F9D2', // Child
+      '1F466', // Boy
+      '1F467', // Girl
+      '1F9D1', // Adult
+      '1F468', // Man
+      '1F469', // Woman
+      '1F9D3', // Older Adult
+      '1F474', // Old Man
+      '1F475' // Old Woman
+    ]
+  }
+  const basicEmojiRegex = new RegExp(`^(${basicEmoji.baseEmoji.join('|')})( (${basicEmoji.skinTones.join('|')}))?$`)
+  const descrBanList = [
+    'police'
+  ]
+  const codePoints = twemoji.convert.toCodePoint(emoji.char, ' ').toUpperCase()
+  const isBasicEmoji = basicEmojiRegex.test(codePoints)
+  const hasBannedWord = descrBanList.some(word => emoji.descr.includes(word))
+
+  return !(isBasicEmoji || hasBannedWord)
+}
+
+const filteredEmojiArray = emojiArray.filter(emojiFilter)
 
 const canvas = document.getElementById('canvas')
-canvas.width = 500
-canvas.height = 400
+canvas.width = 540
+canvas.height = 480
 const ctx = canvas.getContext('2d')
 
-drawBigCenteredText(ctx, ["What's the baby's gender?"])
-const button = document.createElement('button')
+drawTitleScreen(ctx)
 canvas.addEventListener('click', newEmoji(ctx, filteredEmojiArray))
-button.textContent = 'Click for new gender'
-button.addEventListener('click', newEmoji(ctx, filteredEmojiArray))
-document.querySelector('main').appendChild(button)

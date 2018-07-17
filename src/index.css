@@ -1,7 +1,7 @@
 body {
-  max-width: 500px;
+  max-width: 540px;
   margin: auto;
-  padding: 0 1em;
+  padding: 1em;
 }
 
 header {
@@ -15,7 +15,7 @@ h1 {
 
 #canvas {
   width: 100%;
-  box-shadow: 0 0 5px 0px black;
+  /* box-shadow: 0 0 5px 0px black; */
 }
 main > button {
   display: block;
