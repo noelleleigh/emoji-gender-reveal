@@ -166,7 +166,57 @@ const splitStringLines = (longString, maxLineLength) => {
 }
 
 /**
- * Try a new way to display the emoji result
+ * Renders the scene for a given emoji in the canvas
+ * @param {CanvasRenderingContext2D} ctx - The canvas context
+ * @param {Object} emoji - Object with the properties `char` and `descr`
+ */
+const drawEmojiScene = (ctx, emoji) => {
+  twemoji.parse(emoji.char, {
+    callback: useTwemojiImage((event) => {
+      ctx.save()
+
+      // Clear the canvas before we start drawing
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+
+      // Build the string for the text
+      const text = `Congrats! It's a${/^(a|e|i|o|u)/.test(emoji.descr.toLowerCase()) ? 'n' : ''} ${emoji.descr.toUpperCase()}! `
+      const textLines = splitStringLines(text, 17)
+
+      // Fill the backgroun with faint emoji
+      fillCanvasWithImage(ctx, event.target, 0.25)
+
+      // Create the circle where the emoji will be displayed
+      const emojiYPos = 100
+      ctx.fillStyle = 'lightgrey'
+      ctx.beginPath()
+      ctx.arc(ctx.canvas.width / 2, emojiYPos, 65, 0, 2 * Math.PI)
+      ctx.fill()
+
+      ctx.fillStyle = 'white'
+      ctx.beginPath()
+      ctx.arc(ctx.canvas.width / 2, emojiYPos, 60, 0, 2 * Math.PI)
+      ctx.fill()
+
+      // Draw the emoji in its frame
+      ctx.drawImage(event.target, (ctx.canvas.width - event.target.width) / 2, emojiYPos - (event.target.height / 2))
+
+      // Draw the text beneath
+      const fontSize = 48
+      ctx.fillStyle = '#333'
+      ctx.font = `bold ${fontSize}px sans-serif`
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'top'
+      const textY = 170 + ((ctx.canvas.height - 170) - fontSize * textLines.length) / 2
+      fillTextMultiline(ctx, textLines, ctx.canvas.width / 2, textY, fontSize)
+
+      ctx.restore()
+    }),
+    onerror: (error) => console.error(error)
+  })
+}
+
+/**
+ * Select a random emoji from emojiArray and render its scene
  * @param {CanvasRenderingContext2D} ctx - The canvas context
  * @param {Object[]} emojiArray - Array of objects containing `char` and `descr` properties
  * @returns {Function}
@@ -178,46 +228,7 @@ const newEmoji = (ctx, emojiArray) => {
     //   'descr': 'man in suit levitating: medium-light skin tone'
     // }
     const emoji = selectSupportedEmoji(emojiArray)
-    twemoji.parse(emoji.char, {
-      callback: useTwemojiImage((event) => {
-        ctx.save()
-        const textLines = splitStringLines(
-          `Congrats! It's a${/^(a|e|i|o|u)/.test(emoji.descr.toLowerCase()) ? 'n' : ''} ${emoji.descr.toUpperCase()}! `,
-          17
-        )
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-        const blue = '#94F4FF'
-        const pink = '#F5BDC2'
-        for (let radius = ctx.canvas.width; radius > 60; radius -= 20) {
-          ctx.fillStyle = ctx.fillStyle === blue ? pink : blue
-          ctx.beginPath()
-          ctx.arc(ctx.canvas.width / 2, 100, radius, 0, 2 * Math.PI)
-          ctx.fill()
-        }
-        fillCanvasWithImage(ctx, event.target, 0.25)
-
-        ctx.fillStyle = 'lightgrey'
-        ctx.beginPath()
-        ctx.arc(ctx.canvas.width / 2, 100, 65, 0, 2 * Math.PI)
-        ctx.fill()
-
-        ctx.fillStyle = 'white'
-        ctx.beginPath()
-        ctx.arc(ctx.canvas.width / 2, 100, 60, 0, 2 * Math.PI)
-        ctx.fill()
-
-        ctx.drawImage(event.target, (ctx.canvas.width - event.target.width) / 2, 100 - (event.target.height / 2))
-        const fontSize = 48
-        ctx.fillStyle = '#333'
-        ctx.font = `bold ${fontSize}px sans-serif`
-        ctx.textAlign = 'center'
-        ctx.textBaseline = 'top'
-        const textY = 170 + ((ctx.canvas.height - 170) - fontSize * textLines.length) / 2
-        fillTextMultiline(ctx, textLines, ctx.canvas.width / 2, textY, fontSize)
-        ctx.restore()
-      }),
-      onerror: (error) => console.error(error)
-    })
+    drawEmojiScene(ctx, emoji)
   }
 }
 
