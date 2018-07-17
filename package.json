@@ -1,7 +1,7 @@
 {
-  "name": "gender-reveal-cake",
+  "name": "emoji-gender-reveal",
   "version": "1.0.0",
-  "description": "Display emoji gender reveal cakes",
+  "description": "Display emoji gender reveal pictures",
   "main": "server.js",
   "scripts": {
     "start": "npm run build && npm run serve",
@@ -20,7 +20,7 @@
   "author": "Noah Leigh",
   "repository": {
     "type": "git",
-    "url": "https://github.com/noahleigh/gender-reveal-cake.git"
+    "url": "https://github.com/noahleigh/emoji-gender-reveal.git"
   },
   "license": "ISC",
   "devDependencies": {

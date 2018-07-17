@@ -1,10 +1,11 @@
-# gender-reveal-cake
-Generate new and exciting gender reveal cakes using the future of gender: emoji!
+# emoji-gender-reveal
+Need a card for a gender reveal party? Emoji Gender Reveal has you covered with the latest in emoji gender technology!
+Just click the card to randomly pick a new emoji gender!
 
 ## Install
 ```
-git clone https://github.com/noahleigh/gender-reveal-cake.git
-cd gender-reveal-cake
+git clone https://github.com/noahleigh/emoji-gender-reveal.git
+cd emoji-gender-reveal
 ```
 Specify the port you want it to run on in a `.env` file like:
 ```
