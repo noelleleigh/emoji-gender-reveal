@@ -15,8 +15,12 @@ h1 {
 
 #canvas {
   width: 100%;
-  /* box-shadow: 0 0 5px 0px black; */
 }
+
+#canvas:hover {
+  cursor: pointer;
+}
+
 main > button {
   display: block;
 }
