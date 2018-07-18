@@ -1,6 +1,8 @@
 # emoji-gender-reveal
 Need a card for a gender reveal party? Emoji Gender Reveal has you covered with the latest in emoji gender technology!
 Just click the card to randomly pick a new emoji gender!
+![What will the new baby be?](https://cdn.rawgit.com/noahleigh/emoji-gender-reveal/3511bbf7/readme_assets/titlescreen.png)
+![Congrats! It's a PERSON PLAYING HANDBALL: MEDIUM-DARK SKIN TONE](https://cdn.rawgit.com/noahleigh/emoji-gender-reveal/3511bbf7/readme_assets/emojiscreen.png)
 
 ## Install
 ```
