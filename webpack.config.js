@@ -1,6 +1,10 @@
 const HtmlWebPackPlugin = require('html-webpack-plugin')
 
 module.exports = {
+  entry: {
+    client: './src/client.js',
+    puppeteer: './src/puppeteer.js'
+  },
   devtool: 'source-map',
   module: {
     rules: [
@@ -12,8 +16,14 @@ module.exports = {
   },
   plugins: [
     new HtmlWebPackPlugin({
-      template: './src/index.html',
-      filename: 'index.html'
+      chunks: ['client'],
+      template: './src/client.html',
+      filename: 'client.html'
+    }),
+    new HtmlWebPackPlugin({
+      chunks: ['puppeteer'],
+      template: './src/puppeteer.html',
+      filename: 'puppeteer.html'
     })
   ]
 }
