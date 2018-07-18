@@ -7,9 +7,10 @@ const {getTwitterClient, sendTweet} = require('./twitter')
  * @param {Express.response} response - The response for the request
  */
 const twitterBotHandlerGenerator = async (request, response) => {
+  const isProd = process.env.ENVIRONMENT === 'production'
   const port = process.env.PORT
   const scheme = `http${port === 443 ? 's' : ''}`
-  const host = `${request.hostname}:${port}`
+  const host = `${request.hostname}${isProd ? '' : ':' + port}`
   const puppeteerURL = `${scheme}://${host}/puppeteer`
   const emojiResult = await generateEmojiScene(
     puppeteerURL,
