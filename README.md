@@ -35,7 +35,7 @@ TWITTER_ACCESS_TOKEN_SECRET=
 - `tweetEndpoint` is the route that when visited, will trigger a tweet to be posted. If you're hosting this on a publically accessable server, you should use a hard-to-guess name to prevent abuse.
 - For `TWITTER_*` values, see the [Authentication: Access Tokens](https://developer.twitter.com/en/docs/basics/authentication/guides/access-tokens.html) guide on the Twitter developer documentation. Since this bot posts to an account, it needs a consumer to act on behalf of an account (the bot account).
 
-Once these values are filled out, HTTP GET requests to the endpoint route you specified will post a tweet with an image and return that image. If you want the bot to post automatically, you'll need to setup a [cron job](https://www.google.com/search?q=free+web+cron) to hit your server on a regular interval.
+Once these values are filled out, HTTP GET requests to the endpoint route you specified will post a tweet with an image and return a JSON object of the response from Twitter. If you want the bot to post automatically, you'll need to setup a [cron job](https://www.google.com/search?q=free+web+cron) to hit your server on a regular interval.
 
 ## Libraries used
 - [twemoji](https://github.com/twitter/twemoji) - Twitter's emoji image library

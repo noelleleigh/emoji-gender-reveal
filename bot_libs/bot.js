@@ -22,7 +22,7 @@ const twitterBotHandlerGenerator = async (request, response) => {
   try {
     const sentTweet = await sendTweet(client, emojiResult.caption, emojiResult.imageData)
     console.log(sentTweet)
-    response.status(200).type(emojiResult.imageData.mime).send(emojiResult.imageData.buffer)
+    response.status(200).type('text/json').send(sentTweet)
   } catch (err) {
     console.error(err)
     response.status(500).send(err.message)
