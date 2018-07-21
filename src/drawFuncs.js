@@ -1,6 +1,6 @@
 /* eslint-env browser */
 import twemoji from 'twemoji'
-import {useTwemojiImage, selectSupportedEmoji} from './emojiFuncs.js'
+import {useTwemojiImage, selectRandomEmoji} from './emojiFuncs.js'
 import {splitStringLines} from './utils.js'
 
 /**
@@ -244,7 +244,7 @@ const newEmoji = (ctx, emojiArray, callback) => {
     //   'char': '\u{1F916}',
     //   'descr': 'man in suit levitating: medium-light skin tone'
     // }
-    const emoji = selectSupportedEmoji(emojiArray)
+    const emoji = selectRandomEmoji(emojiArray)
     drawEmojiScene(ctx, emoji, callback)
   }
 }

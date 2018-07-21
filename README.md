@@ -37,5 +37,7 @@ TWITTER_ACCESS_TOKEN_SECRET=
 
 Once these values are filled out, HTTP GET requests to the endpoint route you specified will post a tweet with an image and return a JSON object of the response from Twitter. If you want the bot to post automatically, you'll need to setup a [cron job](https://www.google.com/search?q=free+web+cron) to hit your server on a regular interval.
 
+If you want to post **specific** emoji, use the `emoji` query parameter, such as `/tweet?emoji=🤖`
+
 ## Libraries used
 - [twemoji](https://github.com/twitter/twemoji) - Twitter's emoji image library

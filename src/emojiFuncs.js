@@ -20,13 +20,8 @@ const testHasEmoji = (string) => {
  * @param {Object[]} emojiArray - Array of objects containing `char` properties
  * @returns {Object} {char: <String>, descr: <String>}
  */
-const selectSupportedEmoji = (emojiArray) => {
-  let foundSupportedEmoji = false
-  let index = null
-  while (!foundSupportedEmoji) {
-    index = Math.floor(Math.random() * emojiArray.length)
-    foundSupportedEmoji = testHasEmoji(emojiArray[index].char)
-  }
+const selectRandomEmoji = (emojiArray) => {
+  const index = Math.floor(Math.random() * emojiArray.length)
   return emojiArray[index]
 }
 
@@ -50,6 +45,7 @@ const useTwemojiImage = (imgLoadCallback) => {
  * Decides whether to allow this emoji to be used.
  * Disallows basic Baby, Child, Boy, Girl, Adult, Man, Woman, Older Adult, Old Man, Old Woman emoji
  * Disallows emoji with "police" in their description
+ * Disallows emoji that twemoji doesn't support
  * @param {Object} emoji - Object with `char` and `descr` properties
  * @returns {Boolean}
  */
@@ -85,9 +81,11 @@ const emojiFilter = (emoji) => {
   const isBasicEmoji = basicEmojiRegex.test(codePoints)
   const hasBannedWord = descrBanList.some(word => emoji.descr.includes(word))
 
-  return !(isBasicEmoji || hasBannedWord)
+  const isSupported = testHasEmoji(emoji.char)
+
+  return !(isBasicEmoji || hasBannedWord || !isSupported)
 }
 
 const filteredEmojiArray = emojiArray.filter(emojiFilter)
 
-export {filteredEmojiArray, useTwemojiImage, selectSupportedEmoji}
+export {filteredEmojiArray, useTwemojiImage, selectRandomEmoji}

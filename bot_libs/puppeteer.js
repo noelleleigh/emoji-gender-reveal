@@ -60,7 +60,7 @@ const getGeneratedImageData = async (url, outputSelector, metaDataSelector, capt
 }
 
 /**
- * Return {imageData, metaData} fom a URL given the right selectors
+ * Return {imageData, metaData, caption} fom a URL given the right selectors
  * @param {String} url - The URL puppeteer should visit
  * @param {String} outputLinkSelector - The CSS selector for the link to the generated media
  * @param {String} metaDataSelector - The CSS selector for the stringified metadata
