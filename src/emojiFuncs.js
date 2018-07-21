@@ -3,19 +3,6 @@ import twemoji from 'twemoji'
 import emojiArray from './emoji.json'
 
 /**
- * Test that string only contains a single supported emoji.
- * "Supported" means that twemoji can retrieve a single image for it.
- * @param {String} string - String to check for emoji
- * @returns {Bool}
- */
-const testHasEmoji = (string) => {
-  const parsed = twemoji.parse(string)
-  const div = document.createElement('div')
-  div.innerHTML = parsed
-  return (div.textContent === '' && div.childElementCount === 1)
-}
-
-/**
  * Return a randomly chosen entry from `emojiArray` that is supported by twemoji.
  * @param {Object[]} emojiArray - Array of objects containing `char` properties
  * @returns {Object} {char: <String>, descr: <String>}
@@ -81,9 +68,7 @@ const emojiFilter = (emoji) => {
   const isBasicEmoji = basicEmojiRegex.test(codePoints)
   const hasBannedWord = descrBanList.some(word => emoji.descr.includes(word))
 
-  const isSupported = testHasEmoji(emoji.char)
-
-  return !(isBasicEmoji || hasBannedWord || !isSupported)
+  return !(isBasicEmoji || hasBannedWord)
 }
 
 const filteredEmojiArray = emojiArray.filter(emojiFilter)
