@@ -11,7 +11,7 @@ const twitterBotHandlerGenerator = async (request, response) => {
   const port = process.env.PORT
   const scheme = `http${port === 443 ? 's' : ''}`
   const host = `${request.hostname}${isProd ? '' : ':' + port}`
-  const query = `?emoji=${request.query.emoji}`
+  const query = request.query.emoji ? `?emoji=${request.query.emoji}` : ''
   const puppeteerURL = `${scheme}://${host}/puppeteer${query}`
   const emojiResult = await generateEmojiScene(
     puppeteerURL,
