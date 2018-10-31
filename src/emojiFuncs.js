@@ -32,6 +32,8 @@ const useTwemojiImage = (imgLoadCallback) => {
  * Decides whether to allow this emoji to be used.
  * Disallows basic Baby, Child, Boy, Girl, Adult, Man, Woman, Older Adult, Old Man, Old Woman emoji
  * Disallows emoji with "police" in their description
+ * Disallows emoji with "passport control" in their description
+ * Disallows emoji with "customs" in their description
  * Disallows emoji that twemoji doesn't support
  * @param {Object} emoji - Object with `char` and `descr` properties
  * @returns {Boolean}
