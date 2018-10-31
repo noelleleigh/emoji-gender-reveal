@@ -62,7 +62,9 @@ const emojiFilter = (emoji) => {
   const descrBanList = [
     'police',
     'female sign',
-    'male sign'
+    'male sign',
+    'passport control',
+    'customs'
   ]
   const codePoints = twemoji.convert.toCodePoint(emoji.char, ' ').toUpperCase()
   const isBasicEmoji = basicEmojiRegex.test(codePoints)
