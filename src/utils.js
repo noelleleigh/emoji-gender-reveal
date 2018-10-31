@@ -25,4 +25,4 @@ const splitStringLines = (longString, maxLineLength) => {
   return lines
 }
 
-export {splitStringLines}
+export { splitStringLines }

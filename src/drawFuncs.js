@@ -1,7 +1,7 @@
 /* eslint-env browser */
 import twemoji from 'twemoji'
-import {useTwemojiImage, selectRandomEmoji} from './emojiFuncs.js'
-import {splitStringLines} from './utils.js'
+import { useTwemojiImage, selectRandomEmoji } from './emojiFuncs.js'
+import { splitStringLines } from './utils.js'
 
 /**
  * Cover the canvas with instances of an image, rotated 45 degrees
@@ -51,9 +51,9 @@ const roundRect = (ctx, x, y, width, height, radius, fill, stroke) => {
     radius = 5
   }
   if (typeof radius === 'number') {
-    radius = {tl: radius, tr: radius, br: radius, bl: radius}
+    radius = { tl: radius, tr: radius, br: radius, bl: radius }
   } else {
-    var defaultRadius = {tl: 0, tr: 0, br: 0, bl: 0}
+    var defaultRadius = { tl: 0, tr: 0, br: 0, bl: 0 }
     for (var side in defaultRadius) {
       radius[side] = radius[side] || defaultRadius[side]
     }
@@ -249,4 +249,4 @@ const newEmoji = (ctx, emojiArray, callback) => {
   }
 }
 
-export {newEmoji, drawEmojiScene, drawTitleScreen}
+export { newEmoji, drawEmojiScene, drawTitleScreen }

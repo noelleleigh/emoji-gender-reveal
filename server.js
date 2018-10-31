@@ -2,7 +2,7 @@ require('dotenv').config()
 const path = require('path')
 const express = require('express')
 const app = express()
-const {twitterBotHandlerGenerator} = require('./bot_libs/bot')
+const { twitterBotHandlerGenerator } = require('./bot_libs/bot')
 
 app.use(express.static('dist'))
 

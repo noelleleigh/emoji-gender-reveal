@@ -77,4 +77,4 @@ const emojiFilter = (emoji) => {
 
 const filteredEmojiArray = emojiArray.filter(emojiFilter)
 
-export {filteredEmojiArray, useTwemojiImage, selectRandomEmoji}
+export { filteredEmojiArray, useTwemojiImage, selectRandomEmoji }

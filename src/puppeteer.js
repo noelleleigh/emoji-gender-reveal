@@ -1,7 +1,7 @@
 /* eslint-env browser */
 /** @module puppeteer */
-import {newEmoji} from './drawFuncs.js'
-import {filteredEmojiArray} from './emojiFuncs.js'
+import { newEmoji } from './drawFuncs.js'
+import { filteredEmojiArray } from './emojiFuncs.js'
 
 const canvas = document.createElement('canvas')
 canvas.id = 'canvas'

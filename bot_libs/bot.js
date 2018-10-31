@@ -1,5 +1,5 @@
-const {generateEmojiScene} = require('./puppeteer')
-const {getTwitterClient, sendTweet} = require('./twitter')
+const { generateEmojiScene } = require('./puppeteer')
+const { getTwitterClient, sendTweet } = require('./twitter')
 
 /**
  * Handle HTTP request to the tweeting endpoint
