@@ -17,10 +17,10 @@
     "gender",
     "humor"
   ],
-  "author": "Noah Leigh",
+  "author": "Noelle Leigh",
   "repository": {
     "type": "git",
-    "url": "https://github.com/noahleigh/emoji-gender-reveal.git"
+    "url": "https://github.com/n-leigh/emoji-gender-reveal.git"
   },
   "license": "ISC",
   "devDependencies": {

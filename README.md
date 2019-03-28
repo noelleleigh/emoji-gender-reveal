@@ -55,7 +55,7 @@ See [Twitter bot usage](#twitter-bot-usage)
 
 ## Install from GitHub
 ```
-git clone https://github.com/noahleigh/emoji-gender-reveal.git
+git clone https://github.com/n-leigh/emoji-gender-reveal.git
 cd emoji-gender-reveal
 ```
 Specify the port you want it to run on in a `./.env` file like:
