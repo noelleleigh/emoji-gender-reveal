@@ -1,5 +1,5 @@
 """
-Parse https://unicode.org/Public/emoji/11.0/emoji-test.txt into JSON.
+Parse https://unicode.org/Public/emoji/12.0/emoji-test.txt into JSON.
 
 When run as main, saves the output to emoji.json
 """
@@ -38,6 +38,6 @@ def main(url):
 
 
 if __name__ == '__main__':
-    emoji = main('https://unicode.org/Public/emoji/11.0/emoji-test.txt')
+    emoji = main('https://unicode.org/Public/emoji/12.0/emoji-test.txt')
     with open('emoji.json', 'w') as f:
         json.dump(emoji, f, indent=None)
