@@ -33,7 +33,7 @@ The `puppeteer.*` files are files that are used to build the page of the web app
 This file contains all the functions that draw an image onto a [`<canvas>` context](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
 
 #### ./src/emojiFuncs.js
-This file contains helper functions focused on manipulating lists of emoji.
+This file contains helper functions focused on manipulating lists of emoji. The `emojiFilter` function disallows some emoji that aren't funny as genders.
 
 #### ./src/utils.js
 This file contains miscellaneous helper functions for other files to import when needed.
@@ -98,7 +98,12 @@ TWITTER_ACCESS_TOKEN_SECRET=cxmnbvsljrdblmjhb43jhb452
 
 Once these values are filled out, save the file and run `npm start` to start the server. HTTP GET requests to the `tweetEndpoint` you specified will post a tweet with an image and return a JSON object of the response from Twitter. If you want the bot to post automatically, you'll need to setup a [cron job](https://www.google.com/search?q=free+web+cron) to hit your server on a regular interval.
 
-If you want to post **specific** emoji, use the `emoji` [query parameter](https://en.wikipedia.org/wiki/Query_string) by appending `?emoji=` to the end of your request, such as `/tweet?emoji=🤖`
+If you want to post **specific** emoji, use the `emoji` [query parameter](https://en.wikipedia.org/wiki/Query_string) by appending `?emoji=` to the end of your request, such as `/tweet?emoji=🤖`. If you want to test the tweet endpoint without actually posting a real tweet, you can use the `noTweet=true` query parameter, such as `/tweet?emoji=🤖&noTweet=true`.
+
+## To Do
+- Improve error handling when requesting a disallowed emoji.
+- Add support for HTTP authentication on the bot endpoint.
+- Extract out the disallowed emoji list to make it easily editable.
 
 ## Credits
 - [twemoji](https://github.com/twitter/twemoji) - Twitter's emoji image library
