@@ -34,6 +34,7 @@ const useTwemojiImage = (imgLoadCallback) => {
  * Disallows emoji with "police" in their description
  * Disallows emoji with "passport control" in their description
  * Disallows emoji with "customs" in their description
+ * Disallows emoji with "flag: israel" in their description
  * Disallows emoji that twemoji doesn't support
  * @param {Object} emoji - Object with `char` and `descr` properties
  * @returns {Boolean}
@@ -66,7 +67,8 @@ const emojiFilter = (emoji) => {
     'female sign',
     'male sign',
     'passport control',
-    'customs'
+    'customs',
+    'Israel'
   ]
   const codePoints = twemoji.convert.toCodePoint(emoji.char, ' ').toUpperCase()
   const isBasicEmoji = basicEmojiRegex.test(codePoints)
