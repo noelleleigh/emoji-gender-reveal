@@ -58,7 +58,7 @@ This file contains helper functions focused on manipulating lists of emoji.
 This file contains miscellaneous helper functions for other files to import when needed.
 
 #### 📄 `src/emoji.json`
-This file is a JSON array of all the fully-qualified emoji from Unicode 12.0 and is the source of the emoji code points and descriptions that this app uses. It is an array of objects with the properties `char` (Unicode string of the emoji) and `descr` (the emoji's offical description in lower-case). This file is generated using the `emoji_test_extractor.py` script from Unicode's [emoji-test.txt](https://unicode.org/Public/emoji/12.0/emoji-test.txt) file.
+This file is a JSON array of all the fully-qualified emoji from Unicode 12.0 and is the source of the emoji code points and descriptions that this app uses. It is an array of objects with the properties `char` (Unicode string of the emoji) and `descr` (the emoji's official description in lower-case). This file is generated using the `emoji_test_extractor.py` script from Unicode's [emoji-test.txt](https://unicode.org/Public/emoji/12.0/emoji-test.txt) file.
 
 ### 📁 `bot_libs/`
 These Node.js scripts are where the Twitter bot operation lives. They are not Webpacked.
@@ -103,7 +103,7 @@ TWITTER_ACCESS_TOKEN_KEY=
 TWITTER_ACCESS_TOKEN_SECRET=
 ```
 
-- `tweetEndpoint` is the route that when visited, will trigger a tweet to be posted. If you're hosting this on a publically accessable server, you should use a hard-to-guess name to prevent abuse.
+- `tweetEndpoint` is the route that when visited, will trigger a tweet to be posted. If you're hosting this on a publicly accessible server, you should use a hard-to-guess name to prevent abuse.
 - For `TWITTER_*` values, see the [Authentication: Access Tokens](https://developer.twitter.com/en/docs/basics/authentication/guides/access-tokens.html) guide on the Twitter developer documentation. Since this bot posts to an account, it needs a consumer to act on behalf of an account (the bot account).
 
 Here's what that would look like filled out (with dummy values):
@@ -118,7 +118,7 @@ TWITTER_ACCESS_TOKEN_SECRET=cxmnbvsljrdblmjhb43jhb452
 
 Once these values are filled out, save the file and run `npm start` to start the server. HTTP GET requests to the `tweetEndpoint` you specified will post a tweet with an image and return a JSON object of the response from Twitter. If you want the bot to post automatically, you'll need to setup a [cron job](https://www.google.com/search?q=free+web+cron) to hit your server on a regular interval.
 
-The `emoji` query paramater described above works on this endpoint as well. If you want to test the tweet endpoint without actually posting a real tweet, you can use the `noTweet=true` query parameter, such as `/tweet?emoji=🤖&noTweet=true`.
+The `emoji` query parameter described above works on this endpoint as well. If you want to test the tweet endpoint without actually posting a real tweet, you can use the `noTweet=true` query parameter, such as `/tweet?emoji=🤖&noTweet=true`.
 
 ## To Do
 - Improve error handling when tweeting a disallowed emoji.
