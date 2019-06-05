@@ -10,9 +10,8 @@ const ctx = canvas.getContext('2d')
 const preselectedEmoji = (new URL(document.location)).searchParams.get('emoji')
 if (preselectedEmoji) {
   const singleEmojiArray = filteredEmojiArray.filter(emojiObj => emojiObj.char === preselectedEmoji)
-  canvas.addEventListener('click', newEmoji(ctx, singleEmojiArray))
+  newEmoji(ctx, singleEmojiArray)()
 } else {
   canvas.addEventListener('click', newEmoji(ctx, filteredEmojiArray))
+  drawTitleScreen(ctx)
 }
-
-drawTitleScreen(ctx)
