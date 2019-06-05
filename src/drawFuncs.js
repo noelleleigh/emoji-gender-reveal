@@ -215,7 +215,7 @@ const drawEmojiScene = (ctx, emoji, callback) => {
       ctx.drawImage(event.target, (ctx.canvas.width - event.target.width) / 2, emojiYPos - (event.target.height / 2))
 
       // Draw the text beneath
-      const fontSize = 48
+      const fontSize = 46
       ctx.fillStyle = '#333'
       ctx.font = `bold ${fontSize}px sans-serif`
       ctx.textAlign = 'center'
