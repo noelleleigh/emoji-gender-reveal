@@ -1,7 +1,7 @@
 /* eslint-env browser */
 /** @module puppeteer */
 import { newEmoji } from './drawFuncs.js'
-import { filteredEmojiArray } from './emojiFuncs.js'
+import { filteredEmojiArray, filterToSingleEmoji } from './emojiFuncs.js'
 
 const canvas = document.createElement('canvas')
 canvas.id = 'canvas'
@@ -12,7 +12,7 @@ const ctx = canvas.getContext('2d')
 let emojiArray = filteredEmojiArray
 const emoji = (new URL(document.location)).searchParams.get('emoji')
 if (emoji) {
-  emojiArray = filteredEmojiArray.filter(emojiObj => emojiObj.char === emoji)
+  emojiArray = filterToSingleEmoji(emoji)
 }
 newEmoji(ctx, emojiArray, (emoji, text) => {
   const caption = document.createElement('p')
@@ -30,4 +30,5 @@ newEmoji(ctx, emojiArray, (emoji, text) => {
   anchor.id = 'emoji-link'
   anchor.textContent = 'Download Emoji Scene'
   document.body.appendChild(anchor)
+  console.info('Done')
 })()

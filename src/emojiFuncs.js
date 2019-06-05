@@ -3,6 +3,16 @@ import twemoji from 'twemoji'
 import emojiArray from './emoji.json'
 
 /**
+ * Error for emoji problems.
+ */
+class EmojiError extends Error {
+  // eslint-disable-next-line require-jsdoc
+  constructor (message) {
+    super(message)
+    this.name = 'EmojiError'
+  }
+}
+/**
  * Return a randomly chosen entry from `emojiArray` that is supported by twemoji.
  * @param {Object[]} emojiArray - Array of objects containing `char` properties
  * @returns {Object} {char: <String>, descr: <String>}
@@ -77,6 +87,21 @@ const emojiFilter = (emoji) => {
   return !(isBasicEmoji || hasBannedWord)
 }
 
+/**
+ * Filters filteredEmojiArray down to a single emoji.
+ * Throws an error if the emoji is not found in filteredEmojiArray.
+ * @param {String} emoji - Literal emoji character to search for
+ * @returns {Array} An array with a single element: an object with `char` and `descr` properties
+ */
+const filterToSingleEmoji = (emoji) => {
+  const singleEmojiArray = filteredEmojiArray.filter(emojiObj => emojiObj.char === emoji)
+  if (singleEmojiArray.length < 1) {
+    throw new EmojiError(`The provided emoji "${emoji}" is not allowed or unavailable.`)
+  } else {
+    return singleEmojiArray
+  }
+}
+
 const filteredEmojiArray = emojiArray.filter(emojiFilter)
 
-export { filteredEmojiArray, useTwemojiImage, selectRandomEmoji }
+export { filteredEmojiArray, useTwemojiImage, selectRandomEmoji, filterToSingleEmoji, EmojiError }
