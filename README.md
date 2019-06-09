@@ -33,7 +33,7 @@ The Express routing server, the origin of all the behavior of this app. Defines 
 3. A tweeting route, defined by the `tweetEndpoint` environment variable in `.env`, which causes a tweet to be posted to the configured Twitter account.
 
 ### 📄 `emoji_test_extractor.py`
-A Python script used for creating a JSON file of all fully-qualified emoji from the Unicode 12.0 [emoji-test.txt](https://unicode.org/Public/emoji/12.0/emoji-test.txt) file. Depends on [`requests`](https://pypi.org/project/requests/).
+A Python script used for creating a JSON file of all fully-qualified emoji from the Unicode 12.0 [emoji-test.txt](https://unicode.org/Public/emoji/12.0/emoji-test.txt) file.
 
 ### 📄 `.env`
 Environment variable definition file.
