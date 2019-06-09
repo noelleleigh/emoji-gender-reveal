@@ -39,6 +39,16 @@ def main(url):
 
 
 if __name__ == '__main__':
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description='Fetch and process the Unicode 12.0 emoji-test.txt file')
+    parser.add_argument('-f', '--format',
+                        action='store_const',
+                        const=2, default=None,
+                        help='Export an indented JSON object')
+
+    args = parser.parse_args()
     emoji = main('https://unicode.org/Public/emoji/12.0/emoji-test.txt')
-    with open('emoji.json', 'w') as f:
-        json.dump(emoji, f, indent=None)
+    emoji_json = json.dumps(emoji, indent=args.format)
+    print(emoji_json)
