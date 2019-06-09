@@ -5,7 +5,7 @@ When run as main, saves the output to emoji.json
 """
 import re
 import json
-import requests
+import urllib.request
 
 REGEX = re.compile(r'^((([0-9A-F]+) )+)\s+; fully-qualified\s+# ([^ ]+) (.+)')
 
@@ -28,13 +28,14 @@ def extract_info(string):
 
 def main(url):
     """Download the url and extract its information into a list of dicts."""
-    response = requests.get(url)
-    emoji = [
-        extract_info(line) for line in
-        response.text.split('\n')
-        if test_line(line)
-    ]
-    return emoji
+    with urllib.request.urlopen(url) as response:
+        body = response.read().decode()
+        emoji = [
+            extract_info(line) for line in
+            body.split('\n')
+            if test_line(line)
+        ]
+        return emoji
 
 
 if __name__ == '__main__':
