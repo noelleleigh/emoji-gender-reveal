@@ -7,7 +7,9 @@ import re
 import json
 import urllib.request
 
-REGEX = re.compile(r'^((([0-9A-F]+) )+)\s+; fully-qualified\s+# ([^ ]+) (.+)')
+# Matches the fully-qualified entries in the file
+# and has named groups for the character and the description of the emoji
+REGEX = re.compile(r'^[^#]*; fully-qualified\s+# (?P<char>[^ ]+) (?P<descr>.+)$')  # noqa: E501
 
 
 def test_line(string):
@@ -18,8 +20,8 @@ def test_line(string):
 def extract_info(string):
     """Extract the literal emoji codepoint sequence and the description."""
     matches = re.match(REGEX, string)
-    char = matches.group(4)
-    descr = matches.group(5)
+    char = matches.group('char')
+    descr = matches.group('descr')
     return {
         'char': char,
         'descr': descr
