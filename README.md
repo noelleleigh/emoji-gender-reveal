@@ -4,8 +4,8 @@ Just click the card to randomly pick a new emoji gender!
 
 Play with it live on [Glitch 🎏](https://emoji-gender-reveal.glitch.me)
 
-![What will the new baby be?](https://cdn.jsdelivr.net/gh/n-leigh/emoji-gender-reveal@265db182c4d2f6f2743df930359429ca1631cd9e/readme_assets/titlescreen.png)
-![Congrats! It's a PERSON PLAYING HANDBALL: MEDIUM-DARK SKIN TONE](https://cdn.jsdelivr.net/gh/n-leigh/emoji-gender-reveal@265db182c4d2f6f2743df930359429ca1631cd9e/readme_assets/emojiscreen.png)
+![What will the new baby be?](https://cdn.jsdelivr.net/gh/noelleleigh/emoji-gender-reveal@265db182c4d2f6f2743df930359429ca1631cd9e/readme_assets/titlescreen.png)
+![Congrats! It's a PERSON PLAYING HANDBALL: MEDIUM-DARK SKIN TONE](https://cdn.jsdelivr.net/gh/noelleleigh/emoji-gender-reveal@265db182c4d2f6f2743df930359429ca1631cd9e/readme_assets/emojiscreen.png)
 
 ## Usage
 Click on the title card to generate a new random emoji gender reveal.
@@ -19,7 +19,7 @@ Not all emoji are permitted on this app:
 - Emoji that reference oppressive structures (such as [POLICE OFFICER](https://emojipedia.org/police-officer/) or [CUSTOMS](https://emojipedia.org/passport-control/)) are not allowed.
 - Emoji that are too close to a real gender reveal (such as [BOY](https://emojipedia.org/boy/) or [WOMAN](https://emojipedia.org/woman/)) aren't funny and thus are not allowed.
 
-These restrictions are defined in the `emojiFilter()` function in `src/emojifuncs.js`. If you find additional emoji that should not be used according to those criteria, [submit an issue on GitHub](https://github.com/n-leigh/emoji-gender-reveal/issues) with your reasoning, and it will be considered.
+These restrictions are defined in the `emojiFilter()` function in `src/emojifuncs.js`. If you find additional emoji that should not be used according to those criteria, [submit an issue on GitHub](https://github.com/noelleleigh/emoji-gender-reveal/issues) with your reasoning, and it will be considered.
 
 
 ## Project Structure
@@ -75,7 +75,7 @@ This file contains the functions for uploading media and posting a Tweet.
 
 ## Install from GitHub
 ```
-git clone https://github.com/n-leigh/emoji-gender-reveal.git
+git clone https://github.com/noelleleigh/emoji-gender-reveal.git
 cd emoji-gender-reveal
 ```
 Specify the port you want it to run on in an `.env` file. Example:
