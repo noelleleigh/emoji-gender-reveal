@@ -51,14 +51,14 @@ const useTwemojiImage = (imgLoadCallback) => {
  */
 const emojiFilter = (emoji) => {
   const basicEmoji = {
-    'skinTones': [
+    skinTones: [
       '1F3FB', // light skin tone
       '1F3FC', // medium-light skin tone
       '1F3FD', // medium skin tone
       '1F3FE', // medium-dark skin tone
       '1F3FF' // dark skin tone
     ],
-    'baseEmoji': [
+    baseEmoji: [
       '1F476', // Baby
       '1F9D2', // Child
       '1F466', // Boy

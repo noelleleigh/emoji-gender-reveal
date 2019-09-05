@@ -10,7 +10,7 @@ const splitStringLines = (longString, maxLineLength) => {
   const words = longString.split(' ')
   const lines = []
   let currentLine = ''
-  for (let word of words) {
+  for (const word of words) {
     if (currentLine === '') {
       currentLine = word
     } else if (currentLine.length + 1 + word.length < maxLineLength) {
