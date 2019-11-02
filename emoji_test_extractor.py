@@ -1,15 +1,15 @@
 """
-Parse https://unicode.org/Public/emoji/12.0/emoji-test.txt into JSON.
+Parse https://unicode.org/Public/emoji/12.1/emoji-test.txt into JSON.
 
 When run as main, saves the output to emoji.json
 """
-import re
 import json
+import re
 import urllib.request
 
 # Matches the fully-qualified entries in the file
 # and has named groups for the character and the description of the emoji
-REGEX = re.compile(r'^[^#]*; fully-qualified\s+# (?P<char>[^ ]+) (?P<descr>.+)$')  # noqa: E501
+REGEX = re.compile(r'^[^#]*; fully-qualified\s+# (?P<char>[^ ]+) E\d+\.\d (?P<descr>.+)$')  # noqa: E501
 
 
 def test_line(string):
@@ -44,13 +44,13 @@ if __name__ == '__main__':
     import argparse
 
     parser = argparse.ArgumentParser(
-        description='Fetch and process the Unicode 12.0 emoji-test.txt file')
+        description='Fetch and process the Unicode 12.1 emoji-test.txt file')
     parser.add_argument('-f', '--format',
                         action='store_const',
                         const=2, default=None,
                         help='Export an indented JSON object')
 
     args = parser.parse_args()
-    emoji = main('https://unicode.org/Public/emoji/12.0/emoji-test.txt')
+    emoji = main('https://unicode.org/Public/emoji/12.1/emoji-test.txt')
     emoji_json = json.dumps(emoji, indent=args.format)
     print(emoji_json)
