@@ -12,31 +12,6 @@ class EmojiError extends Error {
     this.name = 'EmojiError'
   }
 }
-/**
- * Return a randomly chosen entry from `emojiArray` that is supported by twemoji.
- * @param {Object[]} emojiArray - Array of objects containing `char` properties
- * @returns {Object} {char: <String>, descr: <String>}
- */
-const selectRandomEmoji = (emojiArray) => {
-  const index = Math.floor(Math.random() * emojiArray.length)
-  return emojiArray[index]
-}
-
-/**
- * Handles boilerplate so you can get access to an HTMLImage element of the emoji to do stuff with.
- * @param {Function} imgLoadCallback - Callback function that takes an image load event when the
- * emoji image has finished loading and is ready to be used
- * @returns {Function} Function for the callback option of the twemoji.parse function
- */
-const useTwemojiImage = (imgLoadCallback) => {
-  return (icon, options) => {
-    const resolution = options.size.split('x').map(val => Number.parseInt(val, 10))
-    const image = new Image(...resolution)
-    image.crossOrigin = 'anonymous'
-    image.src = `${options.base}${options.size}/${icon}.png`
-    image.addEventListener('load', imgLoadCallback)
-  }
-}
 
 /**
  * Decides whether to allow this emoji to be used.
@@ -87,21 +62,49 @@ const emojiFilter = (emoji) => {
   return !(isBasicEmoji || hasBannedWord)
 }
 
+// Make the filtered emoji objects to use
+const filteredEmojiArray = emojiArray.filter(emojiKeyValue => emojiFilter(emojiKeyValue[1]))
+const filteredEmojiMap = new Map(filteredEmojiArray)
+
 /**
- * Filters filteredEmojiArray down to a single emoji.
- * Throws an error if the emoji is not found in filteredEmojiArray.
- * @param {String} emoji - Literal emoji character to search for
- * @returns {Array} An array with a single element: an object with `char` and `descr` properties
+ * Return a randomly chosen entry from `filteredEmojiArray`.
+ * @returns {Object} {char: <String>, descr: <String>}
  */
-const filterToSingleEmoji = (emoji) => {
-  const singleEmojiArray = filteredEmojiArray.filter(emojiObj => emojiObj.char === emoji)
-  if (singleEmojiArray.length < 1) {
-    throw new EmojiError(`The provided emoji "${emoji}" is not allowed or unavailable.`)
-  } else {
-    return singleEmojiArray
+const selectRandomEmoji = () => {
+  const index = Math.floor(Math.random() * filteredEmojiArray.length)
+  const key = filteredEmojiArray[index][0]
+  return filteredEmojiMap.get(key)
+}
+
+/**
+ * Handles boilerplate so you can get access to an HTMLImage element of the emoji to do stuff with.
+ * @param {Function} imgLoadCallback - Callback function that takes an image load event when the
+ * emoji image has finished loading and is ready to be used
+ * @returns {Function} Function for the callback option of the twemoji.parse function
+ */
+const useTwemojiImage = (imgLoadCallback) => {
+  return (icon, options) => {
+    const resolution = options.size.split('x').map(val => Number.parseInt(val, 10))
+    const image = new Image(...resolution)
+    image.crossOrigin = 'anonymous'
+    image.src = `${options.base}${options.size}/${icon}.png`
+    image.addEventListener('load', imgLoadCallback)
   }
 }
 
-const filteredEmojiArray = emojiArray.filter(emojiFilter)
+/**
+ * Return a fully-qualified emoji object based on the one provided.
+ * Throws an error if the emoji is not found in filteredEmojiMap.
+ * @param {String} emoji - Literal emoji character to search for
+ * @returns {Object} An object with `char` and `descr` properties
+ */
+const resolveEmoji = (emoji) => {
+  const singleEmoji = filteredEmojiMap.get(emoji)
+  if (singleEmoji) {
+    return singleEmoji
+  } else {
+    throw new EmojiError(`The provided emoji "${emoji}" is not allowed or unavailable.`)
+  }
+}
 
-export { filteredEmojiArray, useTwemojiImage, selectRandomEmoji, filterToSingleEmoji, EmojiError }
+export { useTwemojiImage, selectRandomEmoji, resolveEmoji, EmojiError }

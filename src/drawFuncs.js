@@ -1,15 +1,15 @@
 /* eslint-env browser */
 import twemoji from 'twemoji'
-import { useTwemojiImage, selectRandomEmoji } from './emojiFuncs.js'
+import { selectRandomEmoji, useTwemojiImage } from './emojiFuncs.js'
 import { splitStringLines } from './utils.js'
 
 /**
- * Cover the canvas with instances of an image, rotated 45 degrees
+ * Cover the canvas with instances of an image, rotated 45 degrees clockwise.
  * @param {CanvasRenderingContext2D} ctx - The canvas context
  * @param {HTMLImageElement} image - The image to fill the canvas with
- * @param {Number} alpha - The tranparency of the image (0.0 - 1.0)
+ * @param {Number} [alpha = 1.0] - The tranparency of the image (0.0 - 1.0)
  */
-const fillCanvasWithImage = (ctx, image, alpha) => {
+const fillCanvasWithImage = (ctx, image, alpha = 1.0) => {
   ctx.save()
   ctx.fillStyle = 'white'
   ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
@@ -43,18 +43,12 @@ const fillCanvasWithImage = (ctx, image, alpha) => {
  * @param {Boolean} [fill = false] Whether to fill the rectangle.
  * @param {Boolean} [stroke = true] Whether to stroke the rectangle.
  */
-const roundRect = (ctx, x, y, width, height, radius, fill, stroke) => {
-  if (typeof stroke === 'undefined') {
-    stroke = true
-  }
-  if (typeof radius === 'undefined') {
-    radius = 5
-  }
+const roundRect = (ctx, x, y, width, height, radius = 5, fill = false, stroke = true) => {
   if (typeof radius === 'number') {
     radius = { tl: radius, tr: radius, br: radius, bl: radius }
   } else {
-    var defaultRadius = { tl: 0, tr: 0, br: 0, bl: 0 }
-    for (var side in defaultRadius) {
+    const defaultRadius = { tl: 0, tr: 0, br: 0, bl: 0 }
+    for (const side in defaultRadius) {
       radius[side] = radius[side] || defaultRadius[side]
     }
   }
@@ -234,17 +228,16 @@ const drawEmojiScene = (ctx, emoji, callback) => {
 /**
  * Select a random emoji from emojiArray and render its scene
  * @param {CanvasRenderingContext2D} ctx - The canvas context
- * @param {Object[]} emojiArray - Array of objects containing `char` and `descr` properties
  * @param {Function} callback - Callback function (emoji, text) called when the rendering is complete.
  * @returns {Function}
  */
-const newEmoji = (ctx, emojiArray, callback) => {
+const newEmoji = (ctx, callback) => {
   return () => {
     // const emoji = {
     //   'char': '\u{1F916}',
     //   'descr': 'man in suit levitating: medium-light skin tone'
     // }
-    const emoji = selectRandomEmoji(emojiArray)
+    const emoji = selectRandomEmoji()
     drawEmojiScene(ctx, emoji, callback)
   }
 }

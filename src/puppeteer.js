@@ -1,20 +1,14 @@
 /* eslint-env browser */
 /** @module puppeteer */
-import { newEmoji } from './drawFuncs.js'
-import { filteredEmojiArray, filterToSingleEmoji } from './emojiFuncs.js'
+import { drawEmojiScene, newEmoji } from './drawFuncs.js'
+import { resolveEmoji } from './emojiFuncs.js'
 
-const canvas = document.createElement('canvas')
-canvas.id = 'canvas'
-canvas.width = 540
-canvas.height = 480
-document.body.appendChild(canvas)
-const ctx = canvas.getContext('2d')
-let emojiArray = filteredEmojiArray
-const emoji = (new URL(document.location)).searchParams.get('emoji')
-if (emoji) {
-  emojiArray = filterToSingleEmoji(emoji)
-}
-newEmoji(ctx, emojiArray, (emoji, text) => {
+/**
+ * Callback function called when the rendering is complete.
+ * @param {Object} emoji An object with `char` and `descr` properties
+ * @param {String} text The words that were on the image
+ */
+const callback = (emoji, text) => {
   const caption = document.createElement('p')
   caption.id = 'emoji-caption'
   caption.textContent = text
@@ -31,4 +25,20 @@ newEmoji(ctx, emojiArray, (emoji, text) => {
   anchor.textContent = 'Download Emoji Scene'
   document.body.appendChild(anchor)
   console.info('Done')
-})()
+}
+
+// Set up the canvas element
+const canvas = document.createElement('canvas')
+canvas.id = 'canvas'
+canvas.width = 540
+canvas.height = 480
+document.body.appendChild(canvas)
+const ctx = canvas.getContext('2d')
+
+const emoji = (new URL(document.location)).searchParams.get('emoji')
+if (emoji) {
+  const emojiObj = resolveEmoji(emoji)
+  drawEmojiScene(ctx, emojiObj)
+} else {
+  newEmoji(ctx, callback)()
+}
