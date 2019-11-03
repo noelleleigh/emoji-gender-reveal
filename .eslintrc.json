@@ -1,18 +1,39 @@
 {
-    "extends": "standard",
+    "env": {
+        "browser": true,
+        "es6": true,
+        "node": true
+    },
+    "extends": [
+        "standard"
+    ],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "parserOptions": {
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+    },
     "rules": {
-        "valid-jsdoc": ["error", {
-            "requireReturn": false,
-            "requireReturnDescription": false
-        }],
-        "require-jsdoc": ["warn", {
-            "require": {
-                "FunctionDeclaration": true,
-                "MethodDefinition": true,
-                "ClassDeclaration": true,
-                "ArrowFunctionExpression": true,
-                "FunctionExpression": true
+        "valid-jsdoc": [
+            "error",
+            {
+                "requireReturn": false,
+                "requireReturnDescription": false
             }
-        }]
+        ],
+        "require-jsdoc": [
+            "warn",
+            {
+                "require": {
+                    "FunctionDeclaration": true,
+                    "MethodDefinition": true,
+                    "ClassDeclaration": true,
+                    "ArrowFunctionExpression": true,
+                    "FunctionExpression": true
+                }
+            }
+        ]
     }
 }
