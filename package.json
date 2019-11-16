@@ -48,5 +48,8 @@
     "puppeteer": "^2.0.0",
     "twemoji": "^12.1.4",
     "twitter": "^1.7.1"
+  },
+  "engines": {
+    "node": "12"
   }
 }
