@@ -25,6 +25,11 @@ if (preselectedEmoji) {
   }
 } else {
   // Otherwise, draw the title screen and prepare the random emoji handler
-  canvas.addEventListener('click', newEmoji(ctx))
+  canvas.addEventListener('pointerdown', newEmoji(ctx))
+  canvas.addEventListener('keyup', event => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      newEmoji(ctx)()
+    }
+  })
   drawTitleScreen(ctx)
 }
