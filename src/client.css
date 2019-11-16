@@ -28,3 +28,7 @@ li {
 main > button {
   display: block;
 }
+
+footer > ul > li {
+  line-height: 1.5em;
+}
