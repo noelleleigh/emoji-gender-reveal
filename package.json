@@ -1,6 +1,6 @@
 {
   "name": "emoji-gender-reveal",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Display emoji gender reveal pictures",
   "main": "server.js",
   "scripts": {
