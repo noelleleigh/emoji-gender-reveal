@@ -1,5 +1,5 @@
 /* eslint-env browser */
-import './client.css'
+// import './client.css'
 import { drawEmojiScene, drawTitleScreen, newEmoji } from './drawFuncs.js'
 import { EmojiError, resolveEmoji } from './emojiFuncs.js'
 

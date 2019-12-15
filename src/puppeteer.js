@@ -5,6 +5,7 @@ import { resolveEmoji } from './emojiFuncs.js'
 
 /**
  * Callback function called when the rendering is complete.
+ * Displays the text, the JSON, and a link to download the image.
  * @param {Object} emoji An object with `char` and `descr` properties
  * @param {String} text The words that were on the image
  */
