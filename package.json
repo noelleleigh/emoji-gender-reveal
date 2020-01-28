@@ -46,7 +46,7 @@
     "express": "^4.16.4",
     "is-docker": "^2.0.0",
     "puppeteer": "^2.0.0",
-    "twemoji": "^12.1.4",
+    "twemoji": "^12.1.5",
     "twitter": "^1.7.1"
   },
   "engines": {
