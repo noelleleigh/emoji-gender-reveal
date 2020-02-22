@@ -25,4 +25,15 @@ const splitStringLines = (longString, maxLineLength) => {
   return lines
 }
 
-export { splitStringLines }
+const setupCanvas = async (parent) => {
+  const canvas = document.createElement('canvas')
+  canvas.id = 'canvas'
+  canvas.width = 540
+  canvas.height = 480
+  canvas.tabIndex = 0
+  canvas.role = 'img'
+  parent.appendChild(canvas)
+  return canvas
+}
+
+export { splitStringLines, setupCanvas }

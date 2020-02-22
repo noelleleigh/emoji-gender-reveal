@@ -1,35 +1,19 @@
 /* eslint-env browser */
-// import './client.css'
-import { drawEmojiScene, drawTitleScreen, newEmoji } from './drawFuncs.js'
-import { EmojiError, resolveEmoji } from './emojiFuncs.js'
+import { drawTitleScreen, renderRandomEmojiScene } from './drawFuncs.js'
+import { setupCanvas } from './utils'
 
-// Set up the canvas element
-const canvas = document.getElementById('canvas')
-canvas.width = 540
-canvas.height = 480
-const ctx = canvas.getContext('2d')
+const main = async () => {
+  const canvas = await setupCanvas(document.querySelector('main'))
+  const ctx = canvas.getContext('2d')
 
-// If a specific emoji was passed in, draw it
-const preselectedEmoji = (new URL(document.location)).searchParams.get('emoji')
-if (preselectedEmoji) {
-  try {
-    const singleEmoji = resolveEmoji(preselectedEmoji)
-    drawEmojiScene(ctx, singleEmoji)
-  } catch (err) {
-    if (err instanceof EmojiError) {
-      console.error(err)
-      alert(err.message)
-    } else {
-      throw err
-    }
-  }
-} else {
-  // Otherwise, draw the title screen and prepare the random emoji handler
-  canvas.addEventListener('click', newEmoji(ctx))
+  await drawTitleScreen(ctx)
+
+  canvas.addEventListener('click', () => { renderRandomEmojiScene(ctx) })
   canvas.addEventListener('keyup', event => {
     if (event.key === 'Enter' || event.key === ' ') {
-      newEmoji(ctx)()
+      renderRandomEmojiScene(ctx)
     }
   })
-  drawTitleScreen(ctx)
 }
+
+main()

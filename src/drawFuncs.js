@@ -94,7 +94,7 @@ const fillTextMultiline = (ctx, textArray, x, y, fontSizePx) => {
  * Draw the first scene on the canvas
  * @param {CanvasRenderingContext2D} ctx - The canvas context
  */
-const drawTitleScreen = (ctx) => {
+const drawTitleScreen = async (ctx) => {
   ctx.save()
 
   // Useful constants
@@ -225,21 +225,65 @@ const drawEmojiScene = (ctx, emoji, callback) => {
   })
 }
 
-/**
- * Select a random emoji from emojiArray and render its scene
- * @param {CanvasRenderingContext2D} ctx - The canvas context
- * @param {Function} callback - Callback function (emoji, text) called when the rendering is complete.
- * @returns {Function}
- */
-const newEmoji = (ctx, callback) => {
-  return () => {
-    // const emoji = {
-    //   'char': '\u{1F916}',
-    //   'descr': 'man in suit levitating: medium-light skin tone'
-    // }
-    const emoji = selectRandomEmoji()
-    drawEmojiScene(ctx, emoji, callback)
-  }
+const renderEmojiScene = (ctx, emoji) => {
+  return new Promise((resolve, reject) => {
+    twemoji.parse(emoji.char, {
+      callback: useTwemojiImage(event => {
+        ctx.save()
+
+        // Make a nice variable
+        const htmlImage = event.target
+
+        // Clear the canvas before we start drawing
+        ctx.fillStyle = 'white'
+        ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+
+        // Build the string for the text
+        const article = `a${/^(a|e|i|o|u)/.test(emoji.descr.toLowerCase()) ? 'n' : ''}`
+        const text = `Congrats! It's ${article} ${emoji.descr.toUpperCase()}! `
+        const textLines = splitStringLines(text, 17)
+
+        // Fill the backgroun with faint emoji
+        fillCanvasWithImage(ctx, htmlImage, 0.25)
+
+        // Create the circle where the emoji will be displayed
+        const emojiYPos = 100
+        ctx.fillStyle = 'lightgrey'
+        ctx.beginPath()
+        ctx.arc(ctx.canvas.width / 2, emojiYPos, 65, 0, 2 * Math.PI)
+        ctx.fill()
+
+        ctx.fillStyle = 'white'
+        ctx.beginPath()
+        ctx.arc(ctx.canvas.width / 2, emojiYPos, 60, 0, 2 * Math.PI)
+        ctx.fill()
+
+        // Draw the emoji in its frame
+        ctx.drawImage(htmlImage, (ctx.canvas.width - htmlImage.width) / 2, emojiYPos - (htmlImage.height / 2))
+
+        // Draw the text beneath
+        const fontSize = 46
+        ctx.fillStyle = '#333'
+        ctx.font = `bold ${fontSize}px sans-serif`
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'top'
+        const textY = 170 + ((ctx.canvas.height - 170) - fontSize * textLines.length) / 2
+        fillTextMultiline(ctx, textLines, ctx.canvas.width / 2, textY, fontSize)
+
+        ctx.restore()
+        resolve({ ctx, emoji, text })
+      }),
+      onerror: reject
+    })
+  })
 }
 
-export { newEmoji, drawEmojiScene, drawTitleScreen }
+const renderRandomEmojiScene = async (ctx) => {
+  const emoji = selectRandomEmoji()
+  return renderEmojiScene(ctx, emoji)
+}
+
+export {
+  drawEmojiScene, drawTitleScreen,
+  renderEmojiScene, renderRandomEmojiScene
+}
