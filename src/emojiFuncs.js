@@ -3,10 +3,16 @@ import twemoji from 'twemoji'
 import emojiArray from './emoji.json'
 
 /**
+ * Object with information about a specific emoji
+ * @typedef {Object} EmojiObject
+ * @property {string} char - The emoji as a string literal
+ * @property {string} descr - The Unicode description of the emoji in lower case.
+ */
+
+/**
  * Error for emoji problems.
  */
 class EmojiError extends Error {
-  // eslint-disable-next-line require-jsdoc
   constructor (message) {
     super(message)
     this.name = 'EmojiError'
@@ -15,13 +21,14 @@ class EmojiError extends Error {
 
 /**
  * Decides whether to allow this emoji to be used.
+ *
  * Disallows basic Baby, Child, Boy, Girl, Adult, Man, Woman, Older Adult, Old Man, Old Woman emoji
  * Disallows emoji with "police" in their description
  * Disallows emoji with "passport control" in their description
  * Disallows emoji with "customs" in their description
  * Disallows emoji with "Israel" in their description
  * Disallows emoji that twemoji doesn't support
- * @param {Object} emoji - Object with `char` and `descr` properties
+ * @param {EmojiObject} emoji - Information about the emoji
  * @returns {Boolean}
  */
 const emojiFilter = (emoji) => {
@@ -56,7 +63,9 @@ const emojiFilter = (emoji) => {
     'Israel'
   ]
   const codePoints = twemoji.convert.toCodePoint(emoji.char, ' ').toUpperCase()
+  // Emoji that are too basic to be funny in this context
   const isBasicEmoji = basicEmojiRegex.test(codePoints)
+  // Emoji that represent things that are too bad to be funny, or too basic
   const hasBannedWord = descrBanList.some(word => emoji.descr.includes(word))
 
   return !(isBasicEmoji || hasBannedWord)
@@ -68,7 +77,7 @@ const filteredEmojiMap = new Map(filteredEmojiArray)
 
 /**
  * Return a randomly chosen entry from `filteredEmojiArray`.
- * @returns {Object} {char: <String>, descr: <String>}
+ * @returns {EmojiObject}
  */
 const selectRandomEmoji = () => {
   const index = Math.floor(Math.random() * filteredEmojiArray.length)
@@ -77,10 +86,12 @@ const selectRandomEmoji = () => {
 }
 
 /**
- * Handles boilerplate so you can get access to an HTMLImage element of the emoji to do stuff with.
- * @param {Function} imgLoadCallback - Callback function that takes an image load event when the
- * emoji image has finished loading and is ready to be used
- * @returns {Function} Function for the callback option of the twemoji.parse function
+ * Handles boilerplate so you can get access to an HTMLImage element of the
+ * emoji to do stuff with.
+ * @param {Function} imgLoadCallback - Callback function that takes an image
+ * load event when the emoji image has finished loading and is ready to be used.
+ * @returns {Function} Function for the callback option of the `twemoji.parse`
+ * function. Takes `(icon, options)`.
  */
 const useTwemojiImage = (imgLoadCallback) => {
   return (icon, options) => {
@@ -94,9 +105,9 @@ const useTwemojiImage = (imgLoadCallback) => {
 
 /**
  * Return a fully-qualified emoji object based on the one provided.
- * Throws an error if the emoji is not found in filteredEmojiMap.
+ * Throws an error if the emoji is not found in `filteredEmojiMap`.
  * @param {String} emoji - Literal emoji character to search for
- * @returns {Object} An object with `char` and `descr` properties
+ * @returns {EmojiObject}
  */
 const resolveEmoji = (emoji) => {
   const singleEmoji = filteredEmojiMap.get(emoji)

@@ -4,6 +4,13 @@ import { selectRandomEmoji, useTwemojiImage } from './emojiFuncs.js'
 import { splitStringLines } from './utils.js'
 
 /**
+ * Object with information about a specific emoji
+ * @typedef {Object} EmojiObject
+ * @property {string} char - The emoji as a string literal
+ * @property {string} descr - The Unicode description of the emoji in lower case.
+ */
+
+/**
  * Cover the canvas with instances of an image, rotated 45 degrees clockwise.
  * @param {CanvasRenderingContext2D} ctx - The canvas context
  * @param {HTMLImageElement} image - The image to fill the canvas with
@@ -94,7 +101,7 @@ const fillTextMultiline = (ctx, textArray, x, y, fontSizePx) => {
  * Draw the first scene on the canvas
  * @param {CanvasRenderingContext2D} ctx - The canvas context
  */
-const drawTitleScreen = (ctx) => {
+const drawTitleScreen = async (ctx) => {
   ctx.save()
 
   // Useful constants
@@ -155,8 +162,6 @@ const drawTitleScreen = (ctx) => {
   ctx.textAlign = 'center'
   ctx.font = 'bold 2em sans-serif'
   ctx.fillText('What will the new baby be?', canvasWidth / 2, 70)
-  // ctx.lineWidth = 1.0
-  // ctx.strokeText('What will the new baby be?', canvasWidth / 2, 70)
 
   // Draw button
   roundRect(ctx, (canvasWidth / 2) - (250 / 2), canvasHeight - 100, 250, 50, 5, true, true)
@@ -171,75 +176,77 @@ const drawTitleScreen = (ctx) => {
 }
 
 /**
- * Renders the scene for a given emoji in the canvas
+ * Draw the specified emoji as a gender on the canvas.
  * @param {CanvasRenderingContext2D} ctx - The canvas context
- * @param {Object} emoji - Object with the properties `char` and `descr`
- * @param {Function} callback - Callback function called when the rendering is complete.
- * Takes arguments (emoji, ctx, text)
+ * @param {EmojiObject} emoji - Information about an emoji
+ * @returns {Promise<Object>} Promise resolves to an object with `ctx`,
+ * `emoji`, and the `text` that was written on the canvas.
  */
-const drawEmojiScene = (ctx, emoji, callback) => {
-  twemoji.parse(emoji.char, {
-    callback: useTwemojiImage((event) => {
-      ctx.save()
+const renderEmojiScene = (ctx, emoji) => {
+  return new Promise((resolve, reject) => {
+    twemoji.parse(emoji.char, {
+      callback: useTwemojiImage(event => {
+        ctx.save()
 
-      // Clear the canvas before we start drawing
-      ctx.fillStyle = 'white'
-      ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+        // Make a nice variable
+        const htmlImage = event.target
 
-      // Build the string for the text
-      const text = `Congrats! It's a${/^(a|e|i|o|u)/.test(emoji.descr.toLowerCase()) ? 'n' : ''} ${emoji.descr.toUpperCase()}! `
-      const textLines = splitStringLines(text, 17)
+        // Clear the canvas before we start drawing
+        ctx.fillStyle = 'white'
+        ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
 
-      // Fill the backgroun with faint emoji
-      fillCanvasWithImage(ctx, event.target, 0.25)
+        // Build the string for the text
+        const article = `a${/^(a|e|i|o|u)/.test(emoji.descr.toLowerCase()) ? 'n' : ''}`
+        const text = `Congrats! It's ${article} ${emoji.descr.toUpperCase()}! `
+        const textLines = splitStringLines(text, 17)
 
-      // Create the circle where the emoji will be displayed
-      const emojiYPos = 100
-      ctx.fillStyle = 'lightgrey'
-      ctx.beginPath()
-      ctx.arc(ctx.canvas.width / 2, emojiYPos, 65, 0, 2 * Math.PI)
-      ctx.fill()
+        // Fill the background with faint emoji
+        fillCanvasWithImage(ctx, htmlImage, 0.25)
 
-      ctx.fillStyle = 'white'
-      ctx.beginPath()
-      ctx.arc(ctx.canvas.width / 2, emojiYPos, 60, 0, 2 * Math.PI)
-      ctx.fill()
+        // Create the circle where the emoji will be displayed
+        const emojiYPos = 100
+        ctx.fillStyle = 'lightgrey'
+        ctx.beginPath()
+        ctx.arc(ctx.canvas.width / 2, emojiYPos, 65, 0, 2 * Math.PI)
+        ctx.fill()
 
-      // Draw the emoji in its frame
-      ctx.drawImage(event.target, (ctx.canvas.width - event.target.width) / 2, emojiYPos - (event.target.height / 2))
+        ctx.fillStyle = 'white'
+        ctx.beginPath()
+        ctx.arc(ctx.canvas.width / 2, emojiYPos, 60, 0, 2 * Math.PI)
+        ctx.fill()
 
-      // Draw the text beneath
-      const fontSize = 46
-      ctx.fillStyle = '#333'
-      ctx.font = `bold ${fontSize}px sans-serif`
-      ctx.textAlign = 'center'
-      ctx.textBaseline = 'top'
-      const textY = 170 + ((ctx.canvas.height - 170) - fontSize * textLines.length) / 2
-      fillTextMultiline(ctx, textLines, ctx.canvas.width / 2, textY, fontSize)
+        // Draw the emoji in its frame
+        ctx.drawImage(htmlImage, (ctx.canvas.width - htmlImage.width) / 2, emojiYPos - (htmlImage.height / 2))
 
-      ctx.restore()
+        // Draw the text beneath
+        const fontSize = 46
+        ctx.fillStyle = '#333'
+        ctx.font = `bold ${fontSize}px sans-serif`
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'top'
+        const textY = 170 + ((ctx.canvas.height - 170) - fontSize * textLines.length) / 2
+        fillTextMultiline(ctx, textLines, ctx.canvas.width / 2, textY, fontSize)
 
-      if (callback) callback(emoji, text)
-    }),
-    onerror: (error) => console.error(error)
+        ctx.restore()
+        // Resolve the promise
+        resolve({ ctx, emoji, text })
+      }),
+      onerror: reject
+    })
   })
 }
 
 /**
- * Select a random emoji from emojiArray and render its scene
+ * Call `renderEmojiScene` using a randomly selected emoji.
  * @param {CanvasRenderingContext2D} ctx - The canvas context
- * @param {Function} callback - Callback function (emoji, text) called when the rendering is complete.
- * @returns {Function}
+ * @returns {Promise<Object>} Promise resolves to an object with `ctx`,
+ * `emoji`, and the `text` that was written on the canvas.
  */
-const newEmoji = (ctx, callback) => {
-  return () => {
-    // const emoji = {
-    //   'char': '\u{1F916}',
-    //   'descr': 'man in suit levitating: medium-light skin tone'
-    // }
-    const emoji = selectRandomEmoji()
-    drawEmojiScene(ctx, emoji, callback)
-  }
+const renderRandomEmojiScene = async (ctx) => {
+  const emoji = selectRandomEmoji()
+  return renderEmojiScene(ctx, emoji)
 }
 
-export { newEmoji, drawEmojiScene, drawTitleScreen }
+export {
+  drawTitleScreen, renderEmojiScene, renderRandomEmojiScene
+}
