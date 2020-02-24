@@ -172,6 +172,8 @@ http://localhost:8080/k5jh32g5k2j?emoji=🤖&noTweet=true
 - Improve error handling when tweeting a disallowed emoji.
 - Add support for HTTP authentication on the bot endpoint.
 - Extract out the disallowed emoji list to make it easily editable.
+- Improve experience on slow connections.
+- Improve experience on screen readers.
 
 ## Credits
 
