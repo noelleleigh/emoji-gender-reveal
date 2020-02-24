@@ -8,8 +8,6 @@ Just click the card to randomly pick a new emoji gender!
 
 Play with it live on [Glitch 🎏](https://emoji-gender-reveal.glitch.me)
 
-[![Remix on Glitch](https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg)](https://glitch.com/edit/#!/import/github/noelleleigh/emoji-gender-reveal)
-
 ![What will the new baby be?](https://cdn.jsdelivr.net/gh/noelleleigh/emoji-gender-reveal@265db182c4d2f6f2743df930359429ca1631cd9e/readme_assets/titlescreen.png)
 ![Congrats! It's a PERSON PLAYING HANDBALL: MEDIUM-DARK SKIN TONE](https://cdn.jsdelivr.net/gh/noelleleigh/emoji-gender-reveal@265db182c4d2f6f2743df930359429ca1631cd9e/readme_assets/emojiscreen.png)
 
