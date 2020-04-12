@@ -34,12 +34,9 @@ Root directory
 The Express routing server, the origin of all the behavior of this app. Defines 3 routes:
 
 1. A main route `/` which returns the main app page.
-2. A puppeteer route `/puppeteer` which returns a simplified app page suitable for automated retrieval.
-3. A tweeting route, defined by the `tweetEndpoint` environment variable in `.env`, which causes a tweet to be posted to the configured Twitter account.
-
-### 📄 `emoji_test_extractor.py`
-
-A Python script used for creating a JSON file of all fully-qualified emoji from the Unicode 12.1 [emoji-test.txt](https://unicode.org/Public/emoji/12.1/emoji-test.txt) file.
+1. An emoji route `/emoji` which returns a random emoji (saves the browser from having to download the whole list at the beginning).
+1. A puppeteer route `/puppeteer` which returns a simplified app page suitable for automated retrieval.
+1. A tweeting route, defined by the `tweetEndpoint` environment variable in `.env`, which causes a tweet to be posted to the configured Twitter account.
 
 ### 📄 `.env`
 
@@ -62,32 +59,9 @@ The `puppeteer.*` files are files that are used to build the page of the web app
 
 This file contains all the functions that draw an image onto a [`<canvas>` context](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
 
-#### 📄 `src/emojiFuncs.js`
-
-This file contains helper functions focused on manipulating lists of emoji.
-
 #### 📄 `src/utils.js`
 
 This file contains miscellaneous helper functions for other files to import when needed.
-
-#### 📄 `src/emoji.json`
-
-This file is a JSON array of all the fully-qualified emoji from Unicode 12.1 and is the source of the emoji code points and descriptions that this app uses.
-
-```json
-[
-  [
-    "\ud83d\ude00",
-    {
-      "char": "\ud83d\ude00",
-      "descr": "grinning face"
-    }
-  ],
-  ...
-]
-```
-
-It is an array of key-value pairs, with the key being the string of the emoji, and the value being an object with the properties `char` (Unicode string of the emoji) and `descr` (the emoji's official description in lower-case). This file is generated using the `emoji_test_extractor.py` script from Unicode's [emoji-test.txt](https://unicode.org/Public/emoji/12.1/emoji-test.txt) file.
 
 ### 📁 `bot_libs/`
 
@@ -104,6 +78,37 @@ This file contains the functions necessary to automatically extract the generate
 #### 📄 `bot_libs/twitter.js`
 
 This file contains the functions for uploading media and posting a Tweet.
+
+### 📁 `emoji_libs/`
+
+Node.js and other scripts and files related to processing emoji.
+
+#### 📄 `emoji_libs/emojiFuncs.js`
+
+This file contains helper functions focused on manipulating lists of emoji.
+
+### 📄 `emoji_libs/emoji_test_extractor.py`
+
+A Python script used for creating a JSON file of all fully-qualified emoji from the Unicode 12.1 [emoji-test.txt](https://unicode.org/Public/emoji/12.1/emoji-test.txt) file.
+
+#### 📄 `emoji_libs/emoji.json`
+
+This file is a JSON array of all the fully-qualified emoji from Unicode 12.1 and is the source of the emoji code points and descriptions that this app uses.
+
+```json
+[
+  [
+    "\ud83d\ude00",
+    {
+      "char": "\ud83d\ude00",
+      "descr": "grinning face"
+    }
+  ],
+  ...
+]
+```
+
+It is an array of key-value pairs, with the key being the string of the emoji, and the value being an object with the properties `char` (Unicode string of the emoji) and `descr` (the emoji's official description in lower-case). This file is generated using the `emoji_libs/emoji_test_extractor.py` script from Unicode's [emoji-test.txt](https://unicode.org/Public/emoji/12.1/emoji-test.txt) file.
 
 ## Install from GitHub
 
@@ -168,10 +173,9 @@ http://localhost:8080/k5jh32g5k2j?emoji=🤖&noTweet=true
 
 ## To Do
 
-- Improve error handling when tweeting a disallowed emoji.
 - Add support for HTTP authentication on the bot endpoint.
 - Extract out the disallowed emoji list to make it easily editable.
-- Improve experience on slow connections.
+- Add loading indicators for slow connections.
 - Improve experience on screen readers.
 
 ## Credits
