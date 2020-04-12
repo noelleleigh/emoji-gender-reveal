@@ -13,12 +13,18 @@ const twitterBotHandlerGenerator = async (request, response) => {
   const host = `${request.hostname}${isProd ? "" : ":" + port}`;
   const query = request.query.emoji ? `?emoji=${request.query.emoji}` : "";
   const puppeteerURL = `${scheme}://${host}/puppeteer${query}`;
-  const emojiResult = await generateEmojiScene(
-    puppeteerURL,
-    "#emoji-link",
-    "#emoji-meta",
-    "#emoji-caption"
-  );
+  let emojiResult;
+  try {
+    emojiResult = await generateEmojiScene(
+      puppeteerURL,
+      "#emoji-link",
+      "#emoji-meta",
+      "#emoji-caption"
+    );
+  } catch (error) {
+    return response.status(500).send(error.toString());
+  }
+
   if (!request.query.noTweet) {
     const client = getTwitterClient();
     try {

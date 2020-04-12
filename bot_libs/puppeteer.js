@@ -39,11 +39,17 @@ const getGeneratedImageData = async (
   });
   const page = await browser.newPage();
   await page.goto(url);
-  await Promise.all([
-    page.waitForSelector(captionSelector),
-    page.waitForSelector(metaDataSelector),
-    page.waitForSelector(outputSelector),
-  ]);
+  const selectorOptions = { timeout: 2000 };
+  try {
+    await Promise.all([
+      page.waitForSelector(captionSelector, selectorOptions),
+      page.waitForSelector(metaDataSelector, selectorOptions),
+      page.waitForSelector(outputSelector, selectorOptions),
+    ]);
+  } catch (error) {
+    await browser.close();
+    throw error;
+  }
   const imageData = await page
     .$(outputSelector)
     .then((link) => link.getProperty("href"))
