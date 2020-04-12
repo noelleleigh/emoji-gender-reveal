@@ -47,6 +47,8 @@ const getGeneratedImageData = async (
       page.waitForSelector(outputSelector, selectorOptions),
     ]);
   } catch (error) {
+    // If the selectors time out, then assume a failure and throw the error
+    console.error(error);
     await browser.close();
     throw error;
   }

@@ -22,6 +22,7 @@ const twitterBotHandlerGenerator = async (request, response) => {
       "#emoji-caption"
     );
   } catch (error) {
+    console.error(error);
     return response.status(500).send(error.toString());
   }
 

@@ -31,7 +31,7 @@ const splitStringLines = (longString, maxLineLength) => {
  * @param {Node} parent - A DOM object that the <canvas> will be a child of.
  * @returns {HTMLCanvasElement}
  */
-const setupCanvas = async (parent) => {
+const setupCanvas = (parent) => {
   const canvas = document.createElement("canvas");
   canvas.id = "canvas";
   canvas.width = 540;

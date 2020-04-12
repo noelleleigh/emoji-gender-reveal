@@ -8,7 +8,7 @@ import { setupCanvas } from "./utils";
  */
 const main = async () => {
   // Create the <canvas> and get a context to draw with
-  const canvas = await setupCanvas(document.querySelector("main"));
+  const canvas = setupCanvas(document.querySelector("main"));
   const ctx = canvas.getContext("2d");
 
   // Draw the "What will the new baby be?" screen
