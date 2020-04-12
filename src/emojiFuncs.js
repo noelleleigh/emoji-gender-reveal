@@ -1,6 +1,6 @@
 /* eslint-env browser */
-import twemoji from 'twemoji'
-import emojiArray from './emoji.json'
+import twemoji from "twemoji";
+import emojiArray from "./emoji.json";
 
 /**
  * Object with information about a specific emoji
@@ -13,9 +13,9 @@ import emojiArray from './emoji.json'
  * Error for emoji problems.
  */
 class EmojiError extends Error {
-  constructor (message) {
-    super(message)
-    this.name = 'EmojiError'
+  constructor(message) {
+    super(message);
+    this.name = "EmojiError";
   }
 }
 
@@ -34,56 +34,62 @@ class EmojiError extends Error {
 const emojiFilter = (emoji) => {
   const basicEmoji = {
     skinTones: [
-      '1F3FB', // light skin tone
-      '1F3FC', // medium-light skin tone
-      '1F3FD', // medium skin tone
-      '1F3FE', // medium-dark skin tone
-      '1F3FF' // dark skin tone
+      "1F3FB", // light skin tone
+      "1F3FC", // medium-light skin tone
+      "1F3FD", // medium skin tone
+      "1F3FE", // medium-dark skin tone
+      "1F3FF", // dark skin tone
     ],
     baseEmoji: [
-      '1F476', // Baby
-      '1F9D2', // Child
-      '1F466', // Boy
-      '1F467', // Girl
-      '1F9D1', // Adult
-      '1F468', // Man
-      '1F469', // Woman
-      '1F9D3', // Older Adult
-      '1F474', // Old Man
-      '1F475' // Old Woman
-    ]
-  }
-  const basicEmojiRegex = new RegExp(`^(${basicEmoji.baseEmoji.join('|')})( (${basicEmoji.skinTones.join('|')}))?$`)
+      "1F476", // Baby
+      "1F9D2", // Child
+      "1F466", // Boy
+      "1F467", // Girl
+      "1F9D1", // Adult
+      "1F468", // Man
+      "1F469", // Woman
+      "1F9D3", // Older Adult
+      "1F474", // Old Man
+      "1F475", // Old Woman
+    ],
+  };
+  const basicEmojiRegex = new RegExp(
+    `^(${basicEmoji.baseEmoji.join("|")})( (${basicEmoji.skinTones.join(
+      "|"
+    )}))?$`
+  );
   const descrBanList = [
-    'police',
-    'female sign',
-    'male sign',
-    'passport control',
-    'customs',
-    'Israel'
-  ]
-  const codePoints = twemoji.convert.toCodePoint(emoji.char, ' ').toUpperCase()
+    "police",
+    "female sign",
+    "male sign",
+    "passport control",
+    "customs",
+    "Israel",
+  ];
+  const codePoints = twemoji.convert.toCodePoint(emoji.char, " ").toUpperCase();
   // Emoji that are too basic to be funny in this context
-  const isBasicEmoji = basicEmojiRegex.test(codePoints)
+  const isBasicEmoji = basicEmojiRegex.test(codePoints);
   // Emoji that represent things that are too bad to be funny, or too basic
-  const hasBannedWord = descrBanList.some(word => emoji.descr.includes(word))
+  const hasBannedWord = descrBanList.some((word) => emoji.descr.includes(word));
 
-  return !(isBasicEmoji || hasBannedWord)
-}
+  return !(isBasicEmoji || hasBannedWord);
+};
 
 // Make the filtered emoji objects to use
-const filteredEmojiArray = emojiArray.filter(emojiKeyValue => emojiFilter(emojiKeyValue[1]))
-const filteredEmojiMap = new Map(filteredEmojiArray)
+const filteredEmojiArray = emojiArray.filter((emojiKeyValue) =>
+  emojiFilter(emojiKeyValue[1])
+);
+const filteredEmojiMap = new Map(filteredEmojiArray);
 
 /**
  * Return a randomly chosen entry from `filteredEmojiArray`.
  * @returns {EmojiObject}
  */
 const selectRandomEmoji = () => {
-  const index = Math.floor(Math.random() * filteredEmojiArray.length)
-  const key = filteredEmojiArray[index][0]
-  return filteredEmojiMap.get(key)
-}
+  const index = Math.floor(Math.random() * filteredEmojiArray.length);
+  const key = filteredEmojiArray[index][0];
+  return filteredEmojiMap.get(key);
+};
 
 /**
  * Handles boilerplate so you can get access to an HTMLImage element of the
@@ -95,13 +101,15 @@ const selectRandomEmoji = () => {
  */
 const useTwemojiImage = (imgLoadCallback) => {
   return (icon, options) => {
-    const resolution = options.size.split('x').map(val => Number.parseInt(val, 10))
-    const image = new Image(...resolution)
-    image.crossOrigin = 'anonymous'
-    image.src = `${options.base}${options.size}/${icon}.png`
-    image.addEventListener('load', imgLoadCallback)
-  }
-}
+    const resolution = options.size
+      .split("x")
+      .map((val) => Number.parseInt(val, 10));
+    const image = new Image(...resolution);
+    image.crossOrigin = "anonymous";
+    image.src = `${options.base}${options.size}/${icon}.png`;
+    image.addEventListener("load", imgLoadCallback);
+  };
+};
 
 /**
  * Return a fully-qualified emoji object based on the one provided.
@@ -110,12 +118,14 @@ const useTwemojiImage = (imgLoadCallback) => {
  * @returns {EmojiObject}
  */
 const resolveEmoji = (emoji) => {
-  const singleEmoji = filteredEmojiMap.get(emoji)
+  const singleEmoji = filteredEmojiMap.get(emoji);
   if (singleEmoji) {
-    return singleEmoji
+    return singleEmoji;
   } else {
-    throw new EmojiError(`The provided emoji "${emoji}" is not allowed or unavailable.`)
+    throw new EmojiError(
+      `The provided emoji "${emoji}" is not allowed or unavailable.`
+    );
   }
-}
+};
 
-export { useTwemojiImage, selectRandomEmoji, resolveEmoji, EmojiError }
+export { useTwemojiImage, selectRandomEmoji, resolveEmoji, EmojiError };
