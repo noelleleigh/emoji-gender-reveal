@@ -10,12 +10,12 @@ app.use(compression());
 app.use(express.static("dist"));
 
 // Main endpoint
-app.get("/", function (request, response) {
+app.get("/", (request, response) => {
   response.sendFile(path.resolve(__dirname, "dist/client.html"));
 });
 
 // Base puppeteer endpoint
-app.get("/puppeteer", function (request, response) {
+app.get("/puppeteer", (request, response) => {
   response.sendFile(path.resolve(__dirname, "dist/puppeteer.html"));
 });
 
@@ -25,6 +25,6 @@ app.get(`/${process.env.tweetEndpoint}`, (request, response) => {
 });
 
 // Start the server
-var listener = app.listen(process.env.PORT, function () {
+var listener = app.listen(process.env.PORT, () => {
   console.log("Your app is listening on port " + listener.address().port);
 });
