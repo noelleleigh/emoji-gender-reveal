@@ -1,4 +1,3 @@
-/* eslint-env node */
 const isDocker = require("is-docker");
 const puppeteer = require("puppeteer");
 

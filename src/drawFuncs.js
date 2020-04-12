@@ -1,6 +1,5 @@
 /* eslint-env browser */
 import twemoji from "twemoji";
-import { selectRandomEmoji, useTwemojiImage } from "./emojiFuncs.js";
 import { splitStringLines } from "./utils.js";
 
 /**
@@ -9,6 +8,26 @@ import { splitStringLines } from "./utils.js";
  * @property {string} char - The emoji as a string literal
  * @property {string} descr - The Unicode description of the emoji in lower case.
  */
+
+/**
+ * Handles boilerplate so you can get access to an HTMLImage element of the
+ * emoji to do stuff with.
+ * @param {Function} imgLoadCallback - Callback function that takes an image
+ * load event when the emoji image has finished loading and is ready to be used.
+ * @returns {Function} Function for the callback option of the `twemoji.parse`
+ * function. Takes `(icon, options)`.
+ */
+const useTwemojiImage = (imgLoadCallback) => {
+  return (icon, options) => {
+    const resolution = options.size
+      .split("x")
+      .map((val) => Number.parseInt(val, 10));
+    const image = new Image(...resolution);
+    image.crossOrigin = "anonymous";
+    image.src = `${options.base}${options.size}/${icon}.png`;
+    image.addEventListener("load", imgLoadCallback);
+  };
+};
 
 /**
  * Cover the canvas with instances of an image, rotated 45 degrees clockwise.
@@ -273,14 +292,34 @@ const renderEmojiScene = (ctx, emoji) => {
 };
 
 /**
+ * Call the `/emoji` endpoint and return the response if OK.
+ * @param {String} [emoji] - A literal emoji to be validated and returned.
+ * @returns {Promise<EmojiObject>} A Promise that resolves to a random EmojiObject.
+ */
+const getRandomEmoji = async (emoji = "") => {
+  const response = await fetch(`/emoji?emoji=${emoji}`);
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error(JSON.stringify(body));
+  } else {
+    return body;
+  }
+};
+
+/**
  * Call `renderEmojiScene` using a randomly selected emoji.
  * @param {CanvasRenderingContext2D} ctx - The canvas context
  * @returns {Promise<Object>} Promise resolves to an object with `ctx`,
  * `emoji`, and the `text` that was written on the canvas.
  */
 const renderRandomEmojiScene = async (ctx) => {
-  const emoji = selectRandomEmoji();
+  const emoji = await getRandomEmoji();
   return renderEmojiScene(ctx, emoji);
 };
 
-export { drawTitleScreen, renderEmojiScene, renderRandomEmojiScene };
+export {
+  drawTitleScreen,
+  renderEmojiScene,
+  renderRandomEmojiScene,
+  getRandomEmoji,
+};

@@ -1,6 +1,5 @@
-/* eslint-env browser */
-import twemoji from "twemoji";
-import emojiArray from "./emoji.json";
+const emojiArray = require("./emoji.json");
+const twemoji = require("twemoji");
 
 /**
  * Object with information about a specific emoji
@@ -92,26 +91,6 @@ const selectRandomEmoji = () => {
 };
 
 /**
- * Handles boilerplate so you can get access to an HTMLImage element of the
- * emoji to do stuff with.
- * @param {Function} imgLoadCallback - Callback function that takes an image
- * load event when the emoji image has finished loading and is ready to be used.
- * @returns {Function} Function for the callback option of the `twemoji.parse`
- * function. Takes `(icon, options)`.
- */
-const useTwemojiImage = (imgLoadCallback) => {
-  return (icon, options) => {
-    const resolution = options.size
-      .split("x")
-      .map((val) => Number.parseInt(val, 10));
-    const image = new Image(...resolution);
-    image.crossOrigin = "anonymous";
-    image.src = `${options.base}${options.size}/${icon}.png`;
-    image.addEventListener("load", imgLoadCallback);
-  };
-};
-
-/**
  * Return a fully-qualified emoji object based on the one provided.
  * Throws an error if the emoji is not found in `filteredEmojiMap`.
  * @param {String} emoji - Literal emoji character to search for
@@ -128,4 +107,8 @@ const resolveEmoji = (emoji) => {
   }
 };
 
-export { useTwemojiImage, selectRandomEmoji, resolveEmoji, EmojiError };
+module.exports = {
+  selectRandomEmoji,
+  resolveEmoji,
+  EmojiError,
+};

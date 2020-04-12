@@ -1,6 +1,9 @@
 /* eslint-env browser */
-import { renderEmojiScene, renderRandomEmojiScene } from "./drawFuncs.js";
-import { resolveEmoji } from "./emojiFuncs.js";
+import {
+  renderEmojiScene,
+  renderRandomEmojiScene,
+  getRandomEmoji,
+} from "./drawFuncs.js";
 import { setupCanvas } from "./utils";
 
 /**
@@ -50,7 +53,7 @@ const main = async (emoji) => {
   const ctx = canvas.getContext("2d");
 
   if (emoji) {
-    const emojiObj = resolveEmoji(emoji);
+    const emojiObj = await getRandomEmoji(emoji);
     renderEmojiScene(ctx, emojiObj).then(callback);
   } else {
     renderRandomEmojiScene(ctx).then(callback);
