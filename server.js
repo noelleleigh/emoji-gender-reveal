@@ -56,7 +56,11 @@ app.get(`/${process.env.tweetEndpoint}`, (request, response) => {
   twitterBotHandlerGenerator(request, response);
 });
 
+const IS_DEV = process.env.NODE_ENV === "development";
+const HOST = IS_DEV ? "localhost" : undefined;
+const PORT = process.env.PORT;
+
 // Start the server
-var listener = app.listen(process.env.PORT, () => {
+var listener = app.listen(PORT, HOST, () => {
   console.log("Your app is listening on port " + listener.address().port);
 });
