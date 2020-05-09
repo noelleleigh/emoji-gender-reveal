@@ -293,11 +293,20 @@ const renderEmojiScene = (ctx, emoji) => {
 
 /**
  * Call the `/emoji` endpoint and return the response if OK.
+ *
+ * If `emoji` is not specified, return a random `EmojiObject`.
  * @param {String} [emoji] - A literal emoji to be validated and returned.
- * @returns {Promise<EmojiObject>} A Promise that resolves to a random EmojiObject.
+ * @returns {Promise<EmojiObject>} A Promise that resolves to an EmojiObject.
  */
-const getRandomEmoji = async (emoji = "") => {
-  const response = await fetch(`/emoji?emoji=${emoji}`);
+const getEmoji = async (emoji) => {
+  // Build the URL to the /emoji endpoint
+  let url = "/emoji";
+  if (emoji) {
+    url += "?" + new URLSearchParams({ emoji: emoji }).toString();
+  }
+
+  // Fetch the response
+  const response = await fetch(url);
   const body = await response.json();
   if (!response.ok) {
     throw new Error(JSON.stringify(body));
@@ -313,13 +322,8 @@ const getRandomEmoji = async (emoji = "") => {
  * `emoji`, and the `text` that was written on the canvas.
  */
 const renderRandomEmojiScene = async (ctx) => {
-  const emoji = await getRandomEmoji();
+  const emoji = await getEmoji();
   return renderEmojiScene(ctx, emoji);
 };
 
-export {
-  drawTitleScreen,
-  renderEmojiScene,
-  renderRandomEmojiScene,
-  getRandomEmoji,
-};
+export { drawTitleScreen, renderEmojiScene, renderRandomEmojiScene, getEmoji };

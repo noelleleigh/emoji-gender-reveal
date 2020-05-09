@@ -2,7 +2,7 @@
 import {
   renderEmojiScene,
   renderRandomEmojiScene,
-  getRandomEmoji,
+  getEmoji,
 } from "./drawFuncs.js";
 import { setupCanvas } from "./utils";
 
@@ -53,7 +53,7 @@ const main = async (emoji) => {
   const ctx = canvas.getContext("2d");
 
   if (emoji) {
-    const emojiObj = await getRandomEmoji(emoji);
+    const emojiObj = await getEmoji(emoji);
     renderEmojiScene(ctx, emojiObj).then(callback);
   } else {
     renderRandomEmojiScene(ctx).then(callback);
