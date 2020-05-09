@@ -89,11 +89,11 @@ This file contains helper functions focused on manipulating lists of emoji.
 
 ### 📄 `emoji_libs/emoji_test_extractor.py`
 
-A Python script used for creating a JSON file of all fully-qualified emoji from the Unicode 12.1 [emoji-test.txt](https://unicode.org/Public/emoji/12.1/emoji-test.txt) file.
+A Python script used for creating a JSON file of all fully-qualified emoji from the Unicode 13.0 [emoji-test.txt](https://unicode.org/Public/emoji/13.0/emoji-test.txt) file.
 
 #### 📄 `emoji_libs/emoji.json`
 
-This file is a JSON array of all the fully-qualified emoji from Unicode 12.1 and is the source of the emoji code points and descriptions that this app uses.
+This file is a JSON array of all the fully-qualified emoji from Unicode 13.0 and is the source of the emoji code points and descriptions that this app uses.
 
 ```json
 [
