@@ -1,19 +1,23 @@
 """
-Parse https://unicode.org/Public/emoji/12.1/emoji-test.txt into JSON.
+Parse the Unicode emoji-test.txt file into JSON.
 
-When run as main, outputs the JSON to stdout
+Check EMOJI_TEST_URL to verify the Unicode version.
+
+When run as main, outputs the JSON to stdout.
 """
 import json
 import re
 import urllib.request
+
+EMOJI_TEST_URL = 'https://unicode.org/Public/emoji/13.0/emoji-test.txt'
 
 # Matches the emoji entries in the file and has named groups for the status,
 # character, and the description/name of the emoji
 REGEX = re.compile(r'^[^#]*; (?P<status>[^ ]+)\s+# (?P<char>[^ ]+) E\d+\.\d (?P<descr>.+)$')  # noqa: E501
 
 # Emoji statuses to take action on
-FULLY_QUALIFIED = "fully-qualified"
-UNQUALIFIED = "unqualified"
+FULLY_QUALIFIED = 'fully-qualified'
+UNQUALIFIED = 'unqualified'
 GOOD_STATUSES = set((FULLY_QUALIFIED, UNQUALIFIED))
 
 
@@ -26,7 +30,7 @@ def make_map_tuple(key, char, descr):
     """Return a (key, value) tuple suitable for a JavaScript Map.
 
     The value is a dictionary of char and descr."""
-    return (key, {"char": char, "descr": descr})
+    return (key, {'char': char, 'descr': descr})
 
 
 def main(url):
@@ -39,7 +43,7 @@ def main(url):
     emoji_list = []
     qualified_match = None
     with urllib.request.urlopen(url) as response:
-        body = response.read().decode()
+        body = response.read().decode('utf-8')
         lines = body.split('\n')
 
         for line in lines:
@@ -78,17 +82,14 @@ if __name__ == '__main__':
     import argparse
 
     parser = argparse.ArgumentParser(
-        description=(
-            'Fetch and process the Unicode 12.1 emoji-test.txt file '
-            ' into JSON format'
-        )
+        description=f'Fetch and process {EMOJI_TEST_URL} into JSON format'
     )
     parser.add_argument('-f', '--format',
                         action='store_const',
                         const=2, default=None,
-                        help='Export an indented JSON object')
+                        help='Indent the JSON for readability.')
 
     args = parser.parse_args()
-    emoji = main('https://unicode.org/Public/emoji/12.1/emoji-test.txt')
+    emoji = main(EMOJI_TEST_URL)
     emoji_json = json.dumps(emoji, indent=args.format)
     print(emoji_json)
