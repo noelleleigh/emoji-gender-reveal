@@ -42,6 +42,6 @@
     "twitter": "^1.7.1"
   },
   "engines": {
-    "node": "12"
+    "node": "16.x"
   }
 }
