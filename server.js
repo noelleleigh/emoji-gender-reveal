@@ -62,5 +62,5 @@ const PORT = process.env.PORT;
 
 // Start the server
 var listener = app.listen(PORT, HOST, () => {
-  console.log("Your app is listening on port " + listener.address().port);
+  console.log(`View app at http://localhost:${listener.address().port}`);
 });
