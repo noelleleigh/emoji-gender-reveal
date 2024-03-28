@@ -1,5 +1,5 @@
 const emojiArray = require("./emoji.json");
-const twemoji = require("twemoji");
+const twemoji = require("@twemoji/api");
 
 /**
  * Object with information about a specific emoji

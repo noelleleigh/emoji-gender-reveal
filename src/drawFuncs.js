@@ -1,5 +1,5 @@
 /* eslint-env browser */
-import twemoji from "twemoji";
+import twemoji from "@twemoji/api";
 import { splitStringLines } from "./utils.js";
 
 /**

@@ -33,12 +33,12 @@
     "rollup-plugin-copy": "^3.3.0"
   },
   "dependencies": {
+    "@twemoji/api": "^15.1.0",
     "compression": "^1.7.4",
     "dotenv": "^8.2.0",
     "express": "^4.19.2",
     "is-docker": "^2.0.0",
     "puppeteer": "^5.0.0",
-    "twemoji": "^13.0.0",
     "twitter": "^1.7.1"
   },
   "engines": {

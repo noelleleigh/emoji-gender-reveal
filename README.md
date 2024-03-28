@@ -180,6 +180,6 @@ http://localhost:8080/k5jh32g5k2j?emoji=🤖&noTweet=true
 
 ## Credits
 
-- [twemoji](https://github.com/twitter/twemoji) - Twitter's emoji image library
+- [twemoji](https://github.com/jdecked/twemoji) - Emoji image library
 - [node-twitter](https://github.com/desmondmorris/node-twitter) - Node.js library for interacting with Twitter's API.
 - [Rollup](https://github.com/rollup/rollup) - JavaScript module bundler
