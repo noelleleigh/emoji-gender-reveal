@@ -4,7 +4,6 @@ const {
   selectRandomEmoji,
   EmojiError,
 } = require("./emoji_libs/emojiFuncs");
-const { twitterBotHandlerGenerator } = require("./bot_libs/bot");
 const compression = require("compression");
 const express = require("express");
 const path = require("path");
@@ -49,11 +48,6 @@ app.get("/emoji", async (request, response) => {
 // Base puppeteer endpoint
 app.get("/puppeteer", (request, response) => {
   response.sendFile(path.resolve(__dirname, "dist/puppeteer.html"));
-});
-
-// Tweet-making endpoint
-app.get(`/${process.env.tweetEndpoint}`, (request, response) => {
-  twitterBotHandlerGenerator(request, response);
 });
 
 const IS_DEV = process.env.NODE_ENV === "development";

@@ -36,12 +36,10 @@ The Express routing server, the origin of all the behavior of this app. Defines 
 1. A main route `/` which returns the main app page.
 1. An emoji route `/emoji` which returns a random emoji (saves the browser from having to download the whole list at the beginning).
 1. A puppeteer route `/puppeteer` which returns a simplified app page suitable for automated retrieval.
-1. A tweeting route, defined by the `tweetEndpoint` environment variable in `.env`, which causes a tweet to be posted to the configured Twitter account.
 
 ### 📄 `.env`
 
 Environment variable definition file.
-See [Twitter bot usage](#twitter-bot-usage) for details.
 
 ### 📁 `src/`
 
@@ -53,7 +51,7 @@ The `client.*` files are files that are used to build the main page of the web a
 
 #### 📄 `src/puppeteer.*`
 
-The `puppeteer.*` files are files that are used to build the page of the web app that a [headless `puppeteer` instance](https://github.com/GoogleChrome/puppeteer) of Chromium will use to retrieve the generated emoji image for the Twitter bot.
+The `puppeteer.*` files are files that are used to build the page of the web app that a [headless `puppeteer` instance](https://github.com/GoogleChrome/puppeteer) of Chromium will use to retrieve the generated emoji image.
 
 #### 📄 `src/drawFuncs.js`
 
@@ -65,19 +63,11 @@ This file contains miscellaneous helper functions for other files to import when
 
 ### 📁 `bot_libs/`
 
-These Node.js scripts are where the Twitter bot operation lives. They are not inluded in Rollup.
-
-#### 📄 `bot_libs/bot.js`
-
-This file contains the function `twitterBotHandlerGenerator` which handles an Express request to the Twitter bot route (defined in `server.js`).
+These Node.js scripts are where the automation code lives. They are not inluded in Rollup.
 
 #### 📄 `bot_libs/puppeteer.js`
 
-This file contains the functions necessary to automatically extract the generated emoji gender reveal image and associated metadata from the puppeteer route for the Twitter bot.
-
-#### 📄 `bot_libs/twitter.js`
-
-This file contains the functions for uploading media and posting a Tweet.
+This file contains the functions necessary to automatically extract the generated emoji gender reveal image and associated metadata from the puppeteer route.
 
 ### 📁 `emoji_libs/`
 
@@ -132,45 +122,6 @@ npm start
 
 Once the build is complete and the server has started, open <http://localhost:8080> (replace `8080` with whatever port you chose).
 
-## Twitter bot usage
-
-To use this as a Twitter bot, fill in the necessary information in a `.env` file in the project root.
-
-Here is a sample `.env` template you can populate:
-
-```ini
-tweetEndpoint=
-
-TWITTER_CONSUMER_KEY=
-TWITTER_CONSUMER_SECRET=
-TWITTER_ACCESS_TOKEN_KEY=
-TWITTER_ACCESS_TOKEN_SECRET=
-```
-
-- `tweetEndpoint` is the route that when visited, will trigger a tweet to be posted. If you're hosting this on a publicly accessible server, you should use a hard-to-guess name to prevent abuse.
-- For `TWITTER_*` values, see the [Authentication: Access Tokens](https://developer.twitter.com/en/docs/basics/authentication/guides/access-tokens.html) guide on the Twitter developer documentation. Since this bot posts to an account, it needs a consumer to act on behalf of an account (the bot account).
-
-Here's what that would look like filled out (with dummy values):
-
-```ini
-tweetEndpoint=k5jh32g5k2j
-
-TWITTER_CONSUMER_KEY=weuyro234y2
-TWITTER_CONSUMER_SECRET=sadGAS435DGAERgegsegASgAESg3
-TWITTER_ACCESS_TOKEN_KEY=12342341235-sdgaEAFF3453DWF
-TWITTER_ACCESS_TOKEN_SECRET=cxmnbvsljrdblmjhb43jhb452
-```
-
-Once these values are filled out, save the file and run `npm start` to start the server. HTTP GET requests to the `tweetEndpoint` you specified will post a tweet with an image and return a JSON object of the response from Twitter. If you want the bot to post automatically, you'll need to setup a [cron job](https://www.google.com/search?q=free+web+cron) to hit your server on a regular interval.
-
-If you want to generate a specific emoji, you can use the `emoji` query parameter. If you want to test the tweet endpoint without actually posting a real tweet, you can use the `noTweet=true` query parameter.
-
-Example (pretend to tweet the robot emoji):
-
-```url
-http://localhost:8080/k5jh32g5k2j?emoji=🤖&noTweet=true
-```
-
 ## To Do
 
 - Add support for HTTP authentication on the bot endpoint.
@@ -181,5 +132,4 @@ http://localhost:8080/k5jh32g5k2j?emoji=🤖&noTweet=true
 ## Credits
 
 - [twemoji](https://github.com/jdecked/twemoji) - Emoji image library
-- [node-twitter](https://github.com/desmondmorris/node-twitter) - Node.js library for interacting with Twitter's API.
 - [Rollup](https://github.com/rollup/rollup) - JavaScript module bundler

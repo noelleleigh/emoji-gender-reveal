@@ -38,8 +38,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.19.2",
     "is-docker": "^2.0.0",
-    "puppeteer": "^23.4.0",
-    "twitter": "^1.7.1"
+    "puppeteer": "^23.4.0"
   },
   "engines": {
     "node": ">=20"
