@@ -1,12 +1,8 @@
-require("dotenv").config();
-const {
-  resolveEmoji,
-  selectRandomEmoji,
-  EmojiError,
-} = require("./emoji_libs/emojiFuncs");
-const compression = require("compression");
-const express = require("express");
-const path = require("path");
+import compression from "compression";
+import 'dotenv/config';
+import express from "express";
+import { resolve } from "node:path";
+import { EmojiError, resolveEmoji, selectRandomEmoji } from "./emoji_libs/emojiFuncs.js";
 
 // Setup Express
 const app = express();
@@ -15,7 +11,7 @@ app.use(express.static("dist"));
 
 // Main endpoint
 app.get("/", (request, response) => {
-  response.sendFile(path.resolve(__dirname, "dist/client.html"));
+  response.sendFile(resolve(import.meta.dirname, "dist/client.html"));
 });
 
 // Emoji endpoint
@@ -47,7 +43,7 @@ app.get("/emoji", async (request, response) => {
 
 // Base puppeteer endpoint
 app.get("/puppeteer", (request, response) => {
-  response.sendFile(path.resolve(__dirname, "dist/puppeteer.html"));
+  response.sendFile(resolve(import.meta.dirname, "dist/puppeteer.html"));
 });
 
 const IS_DEV = process.env.NODE_ENV === "development";
