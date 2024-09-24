@@ -35,7 +35,7 @@
   "dependencies": {
     "@twemoji/api": "^15.1.0",
     "compression": "^1.7.4",
-    "dotenv": "^8.2.0",
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "is-docker": "^2.0.0",
     "puppeteer": "^23.4.0"
