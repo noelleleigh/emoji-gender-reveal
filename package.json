@@ -2,6 +2,7 @@
   "name": "emoji-gender-reveal",
   "version": "1.4.0",
   "description": "Display emoji gender reveal pictures",
+  "type": "module",
   "main": "server.js",
   "scripts": {
     "start": "npm run build && npm run serve",

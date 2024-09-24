@@ -1,5 +1,5 @@
-const emojiArray = require("./emoji.json");
-const twemoji = require("@twemoji/api");
+import emojiArray from "./emoji.json" with { type: 'json' };
+import twemoji from "@twemoji/api";
 
 /**
  * Object with information about a specific emoji
@@ -107,7 +107,7 @@ const resolveEmoji = (emoji) => {
   }
 };
 
-module.exports = {
+export {
   selectRandomEmoji,
   resolveEmoji,
   EmojiError,
