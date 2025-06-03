@@ -31,11 +31,10 @@ Root directory
 
 ### 📄 `server.js`
 
-The Express routing server, the origin of all the behavior of this app. Defines 3 routes:
+The Express routing server, the origin of all the behavior of this app. Defines 2 routes:
 
 1. A main route `/` which returns the main app page.
 1. An emoji route `/emoji` which returns a random emoji (saves the browser from having to download the whole list at the beginning).
-1. A puppeteer route `/puppeteer` which returns a simplified app page suitable for automated retrieval.
 
 ### 📄 `.env`
 
@@ -49,10 +48,6 @@ This folder contains the code and assets that will get packaged by [Rollup](http
 
 The `client.*` files are files that are used to build the main page of the web app that users will see.
 
-#### 📄 `src/puppeteer.*`
-
-The `puppeteer.*` files are files that are used to build the page of the web app that a [headless `puppeteer` instance](https://github.com/GoogleChrome/puppeteer) of Chromium will use to retrieve the generated emoji image.
-
 #### 📄 `src/drawFuncs.js`
 
 This file contains all the functions that draw an image onto a [`<canvas>` context](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
@@ -60,14 +55,6 @@ This file contains all the functions that draw an image onto a [`<canvas>` conte
 #### 📄 `src/utils.js`
 
 This file contains miscellaneous helper functions for other files to import when needed.
-
-### 📁 `bot_libs/`
-
-These Node.js scripts are where the automation code lives. They are not inluded in Rollup.
-
-#### 📄 `bot_libs/puppeteer.js`
-
-This file contains the functions necessary to automatically extract the generated emoji gender reveal image and associated metadata from the puppeteer route.
 
 ### 📁 `emoji_libs/`
 

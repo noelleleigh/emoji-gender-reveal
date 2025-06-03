@@ -41,11 +41,6 @@ app.get("/emoji", async (request, response) => {
   }
 });
 
-// Base puppeteer endpoint
-app.get("/puppeteer", (request, response) => {
-  response.sendFile(resolve(import.meta.dirname, "dist/puppeteer.html"));
-});
-
 const IS_DEV = process.env.NODE_ENV === "development";
 const HOST = IS_DEV ? "localhost" : undefined;
 const PORT = process.env.PORT;

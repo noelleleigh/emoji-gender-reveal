@@ -30,10 +30,4 @@ export default [
     output: commonOutput,
     plugins: [...commonPlugins, copy(copyArgs("client"))],
   },
-  {
-    // Output for the puppeteer page
-    input: "src/puppeteer.js",
-    output: commonOutput,
-    plugins: [...commonPlugins, copy(copyArgs("puppeteer"))],
-  },
 ];
